@@ -16,7 +16,6 @@ module.exports = {
                             return;
                         }
 
-                        message = " "
                         let rolesData = {}
                     
                         for (const role of results) {
@@ -63,15 +62,41 @@ module.exports = {
                                 }
                         })
 
-                        // Generate message
+                        // GENERATE MESSAGE
+                        // Countries
+                        let messageCountries = "---------------------------------------------------------------------------------------------------------}\n"
+                        messageCountries += "## __Countries__\n"
                         countryList.forEach(e => {
-                                message += `- <@&${e}> - ${rolesData[e].leader} (${rolesData[e].memberCount})\n`
+                                messageCountries += `- <@&${e}> - ${rolesData[e].leader ?? "*none*"} (${rolesData[e].memberCount})\n`
                         })
-                        console.log(`MESSAGE!!!!!! : ${message}`)
+                        // City-States
+                        let messageCity_States = "---------------------------------------------------------------------------------------------------------}\n"
+                        messageCity_States += "## __City-States__\n"
+                        city_stateList.forEach(e => {
+                                messageCity_States += `- <@&${e}> - ${rolesData[e].leader ?? "*none*"} (${rolesData[e].memberCount})\n`
+                        })
+                        // Subjects
+                        let messageSubjects = "---------------------------------------------------------------------------------------------------------}\n"
+                        messageSubjects += "## __Subjects__\n"
+                        subjectList.forEach(e => {
+                                messageSubjects += `- <@&${e}> - ${rolesData[e].leader ?? "*none*"} (${rolesData[e].memberCount})\n`
+                        })
+                        // Organisations
+                        let messageOrganisations = "---------------------------------------------------------------------------------------------------------}\n"
+                        messageOrganisations += "## __Organisations__\n"
+                        organisationList.forEach(e => {
+                                messageOrganisations += `- <@&${e}> - ${rolesData[e].leader ?? "*none*"} (${rolesData[e].memberCount})\n`
+                        })
+                        // Religions
+                        let messageReligions = "---------------------------------------------------------------------------------------------------------}\n"
+                        messageReligions += "## __Religions__\n"
+                        religionList.forEach(e => {
+                                messageReligions += `- <@&${e}> - ${rolesData[e].leader ?? "*none*"} (${rolesData[e].memberCount})\n`
+                        })
 
-                        // Send message
+                        // SEND MESSAGE
                         await interaction.reply({
-                                content: message,
+                                content: messageCountries + messageCity_States + messageSubjects + messageOrganisations + messageReligions,
                                 ephemeral: true,
                               })
 
