@@ -18,12 +18,23 @@ module.exports = {
                         console.log('database connection successful')
                         })
 
-                console.log(db.run(`SELECT roleId WHERE roleId LIKE ${roleId}`))
-                // db.run(`INSERT INTO watchedRoles 
-                // (roleId, guildId)
-                // VALUES (${roleId}, ${guildId})`);
+                db.all(`SELECT roleId FROM watchedRoles WHERE roleId LIKE ?`, [roleId], async(err, rows) => {
+                        result = rows.map(row => row.roleId)
+                        console.log(result)
+                        // If the role isn't already added - Add it to the Watch list
+                        if(result.length == 0){
+                                db.run(`INSERT INTO watchedRoles (roleId, guildId) VALUES (${roleId}, ${guildId})`);
+                                await interaction.reply(`Added <@&${roleId}> to the Role Counter watch list!`)
+                        }
+                        else{
+                                await interaction.reply({
+                                        content:"This role is already on the Role Counter watch list",
+                                        ephemeral: true,
+                        });
+                        }
+                })
                 
-                console.log(db.run("SELECT * FROM watchedRoles"))
+                // console.log(db.run("SELECT * FROM watchedRoles"))
 
                 db.close((err) => {
                         if(err) return console.error(err.message)
