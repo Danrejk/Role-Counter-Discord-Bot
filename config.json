@@ -1,0 +1,17 @@
+{
+	"setvolume": 100,
+	"volume": 100,
+	"nyrokDayCap": 5,
+	"mhyrielleDayCap": 5,
+	"grzegorzDayCap": 3,
+	"map": "https://cdn.discordapp.com/attachments/1012107776962613320/1060617122134364261/Obama_Campaign_January1.jpg",
+	"mhyrielle": 0,
+	"mhyrielleLastEat": 0,
+	"mhyrielleExhaustion": 0,
+	"nyrok": 0,
+	"nyrokLastEat": 1,
+	"nyrokExhaustion": 0,
+	"grzegorz": 0,
+	"grzegorzLastEat": 0,
+	"grzegorzExhaustion": 0
+}
