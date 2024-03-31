@@ -3,12 +3,19 @@ const app = express();
 const Discord = require("discord.js");
 const { REST } = require("@discordjs/rest");
 const { Routes } = require('discord-api-types/v9');
-const sqlite3 = require('sqlite3').verbose();
 
-const db = new sqlite3.Database('./data.db', sqlite3.OPEN_READWRITE, (err) =>{
-  if (err) return console.errror(err.message);
-  console.log('database connection successful')
-})
+// const sqlite3 = require('sqlite3').verbose();
+// const db = new sqlite3.Database('./data.db', sqlite3.OPEN_READWRITE, (err) =>{
+//   if (err) return console.errror(err.message);
+//   console.log('database connection successful')
+// })
+
+// db.run(`CREATE TABLE watchedRoles(roleId, guildId)`);
+
+// db.close((err) => {
+//   if(err) return console.error(err.message)
+// })
+
 const fs = require("fs");
 const path = require("path");
 
