@@ -15,7 +15,8 @@
     "discord-api-types": "^0.37.77",
     "discord.js": "^14.14.1",
     "dotenv": "^16.4.5",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "node": "^16.20.2"

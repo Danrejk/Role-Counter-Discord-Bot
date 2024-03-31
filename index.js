@@ -3,7 +3,12 @@ const app = express();
 const Discord = require("discord.js");
 const { REST } = require("@discordjs/rest");
 const { Routes } = require('discord-api-types/v9');
+const sqlite3 = require('sqlite3').verbose();
 
+const db = new sqlite3.Database('./data.db', sqlite3.OPEN_READWRITE, (err) =>{
+  if (err) return console.errror(err.message);
+  console.log('database connection successful')
+})
 const fs = require("fs");
 const path = require("path");
 
@@ -76,7 +81,7 @@ client.on("interactionCreate", async interaction => {
   }
   catch(error){
       console.error(error);rest.put
-      await interaction.reply({content: "Sorry little one. Something screwed up. "});
+      await interaction.reply({content: "Sorry little one. Something screwed up. <@512664079496642575> please fix it."});
   }
 });
 
