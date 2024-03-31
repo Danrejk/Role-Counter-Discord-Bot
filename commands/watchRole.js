@@ -29,7 +29,7 @@ module.exports = {
 
                 db.all(`SELECT roleId FROM watchedRoles WHERE roleId LIKE ?`, [roleId], async(err, rows) => {
                         result = rows.map(row => row.roleId)
-                        console.log(result)
+                        
                         // If the role isn't already added - Add it to the Watch list
                         if(result.length == 0){
                                 db.run(`INSERT INTO watchedRoles (roleId, guildId, category, leader) VALUES (?, ?, ?, ?)`, [roleId, guildId, category, leader]);
