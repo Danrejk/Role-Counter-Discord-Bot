@@ -29,7 +29,7 @@ module.exports = {
 
                 db.all(`SELECT roleId FROM watchedRoles WHERE roleId LIKE ?`, [roleId], async(err, rows) => {
                         result = rows.map(row => row.roleId)
-                        
+
                         // If the role isn't already added - Add it to the Watch list
                         if(result.length == 0){
                                 db.run(`INSERT INTO watchedRoles (roleId, guildId, category, leader) VALUES (?, ?, ?, ?)`, [roleId, guildId, category, leader]);
@@ -40,7 +40,7 @@ module.exports = {
                                         if (err) {
                                             return console.error(err.message);
                                         }
-                                        await interaction.reply(`This role was already on the Role Watch List. <@&${roleId}> has been updatedchanges}`);
+                                        await interaction.reply(`<@&${roleId}> was already on the Role Member Counter watch list and has been updated!`);
                                     });
                         }
                 })
