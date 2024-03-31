@@ -25,28 +25,26 @@ module.exports = {
                 leader = interaction.options.getString("leader")
 
                 const db = new sqlite3.Database('./data.db', sqlite3.OPEN_READWRITE, (err) =>{
-                        if (err) return console.errror(err.message);
-                        console.log('database connection successful')
-                        })
+                        if (err) return console.errror(err.message);})
 
                 db.all(`SELECT roleId FROM watchedRoles WHERE roleId LIKE ?`, [roleId], async(err, rows) => {
                         result = rows.map(row => row.roleId)
                         console.log(result)
                         // If the role isn't already added - Add it to the Watch list
                         if(result.length == 0){
-                                db.run(`INSERT INTO watchedRoles (roleId, guildId, category, leader) VALUES (${roleId}, ${guildId}, ${category}, ${leader})`);
+                                db.run(`INSERT INTO watchedRoles (roleId, guildId, category, leader) VALUES (?, ?, ?, ?)`, [roleId, guildId, category, leader]);
                                 await interaction.reply(`Added <@&${roleId}> to the Role Member Counter watch list!`)
                         }
                         else{
-                                await interaction.reply({
-                                        content:"This role is already on the Role Member Counter watch list",
-                                        ephemeral: true,
-                        });
+                                db.run(`UPDATE watchedRoles SET guildId = ?, category = ?, leader = ? WHERE roleId = ?`, [guildId, category, leader, roleId], async(err) => {
+                                        if (err) {
+                                            return console.error(err.message);
+                                        }
+                                        await interaction.reply(`This role was already on the Role Watch List. <@&${roleId}> has been updatedchanges}`);
+                                    });
                         }
                 })
                 
-                db.close((err) => {
-                        if(err) return console.error(err.message)
-                })
+                db.close((err) => { if(err) return console.error(err.message) })
         },
 }

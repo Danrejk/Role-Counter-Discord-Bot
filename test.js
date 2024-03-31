@@ -5,7 +5,7 @@ const db = new sqlite3.Database('./data.db', sqlite3.OPEN_READWRITE, (err) =>{
 })
 
 // db.run(`CREATE TABLE watchedRoles(roleId, guildId)`);
-db.run(`ALTER TABLE watchedRoles ADD category`)
+db.run(`DELETE FROM watchedRoles`)
 
 db.close((err) => {
   if(err) return console.error(err.message)
