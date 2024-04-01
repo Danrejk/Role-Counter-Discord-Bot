@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { PermissionFlagsBits } = require("discord-api-types/v10");
-const { updateMessages } = require("../updateMessages");
+const { updateMessages } = require("../components/updateMessages");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -14,6 +14,7 @@ module.exports = {
                         ephemeral: true,
                 });
 
-                updateMessages({ client, interaction })
+                interactionGuildId = interaction.guild.id
+                updateMessages({ client, interactionGuildId })
 	},
 }

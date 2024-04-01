@@ -7,11 +7,14 @@ const { Routes } = require('discord-api-types/v9');
 const fs = require("fs");
 const path = require("path");
 
+const { updateMessages } = require("./components/updateMessages");
+
 const client = new Discord.Client({
   intents: [
     Discord.GatewayIntentBits.Guilds,
     Discord.GatewayIntentBits.GuildMessages,
     Discord.GatewayIntentBits.GuildMembers,
+    Discord.GatewayIntentBits.GuildModeration,
   ],
 });
 
@@ -79,6 +82,12 @@ client.on("interactionCreate", async interaction => {
       console.error(error);rest.put
       await interaction.reply({content: "Sorry little one. Something screwed up. <@512664079496642575> please fix it."});
   }
+});
+
+// Listen for role member changes
+client.on("guildMemberUpdate", (oldMember, newMember) => {
+  interactionGuildId = newMember.guild.id
+  updateMessages({ client, interactionGuildId })
 });
 
 // Login

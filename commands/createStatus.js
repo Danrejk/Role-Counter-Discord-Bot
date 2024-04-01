@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { PermissionFlagsBits } = require("discord-api-types/v10");
 const sqlite3 = require('sqlite3').verbose();
-const { statusMessages } = require("../statusMessage");
+const { statusMessages } = require("../components/statusMessage");
 
 module.exports = {
 	data: new SlashCommandBuilder()

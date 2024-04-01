@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const { statusMessages } = require("../statusMessage");
+const { statusMessages } = require("../components/statusMessage");
 
 module.exports = {
     data: new SlashCommandBuilder()

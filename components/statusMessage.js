@@ -1,6 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
 
-function statusMessages({ client, interaction }) {
+function statusMessages({ client, interactionGuildId }) {
         return new Promise((resolve, reject) => {
             const db = new sqlite3.Database('./data.db', sqlite3.OPEN_READWRITE, (err) => {
                 if (err) {
@@ -15,7 +15,7 @@ function statusMessages({ client, interaction }) {
                 let organisationsMessage = "-------------------------------------------------------------------}\n"
                 let religionsMessage = "-------------------------------------------------------------------}\n"
     
-                db.all(`SELECT * FROM watchedRoles WHERE guildId = ?`,[interaction.guild.id], async (err, results) => {
+                db.all(`SELECT * FROM watchedRoles WHERE guildId = ?`,[interactionGuildId], async (err, results) => {
                     if (err) {
                         console.error(err);
                         reject(err);
@@ -32,7 +32,7 @@ function statusMessages({ client, interaction }) {
                         await guild.members.fetch()
                         const guildRole = await guild.roles.fetch(role.roleId);
                         const memberCount = guildRole ? guildRole.members.size : 0;
-                        console.log(`Role ID: ${role.roleId}, Member Count: ${memberCount}`);
+                        //console.log(`Role ID: ${role.roleId}, Member Count: ${memberCount}`);
 
                         // Add role data to rolesData
                         rolesData[role.roleId] = {
@@ -58,7 +58,7 @@ function statusMessages({ client, interaction }) {
                 religionList = []
 
                 roleIdsSorted.forEach(e => {
-                        console.log(rolesData[e])
+                        //console.log(rolesData[e])
                         switch(rolesData[e].category){
                                 case "country": countryList.push(e); break;
                                 case "city-state": city_stateList.push(e); break;
