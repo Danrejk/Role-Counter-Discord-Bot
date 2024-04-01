@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const sqlite3 = require('sqlite3').verbose();
 
-function statusMessages(client) {
+function statusMessages({ client, interaction }) {
         return new Promise((resolve, reject) => {
             const db = new sqlite3.Database('./data.db', sqlite3.OPEN_READWRITE, (err) => {
                 if (err) {
@@ -16,7 +16,7 @@ function statusMessages(client) {
                 let organisationsMessage = "-------------------------------------------------------------------}\n"
                 let religionsMessage = "-------------------------------------------------------------------}\n"
     
-                db.all(`SELECT * FROM watchedRoles`, async (err, results) => {
+                db.all(`SELECT * FROM watchedRoles WHERE guildId = ?`,[interaction.guild.id], async (err, results) => {
                     if (err) {
                         console.error(err);
                         reject(err);

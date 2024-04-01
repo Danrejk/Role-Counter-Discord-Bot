@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const sqlite3 = require('sqlite3').verbose();
 const { statusMessages } = require("../statusMessage");
 
 module.exports = {
@@ -8,7 +7,7 @@ module.exports = {
         .setDescription("Displays the current count of members of each watched role."),
     execute: async ({ client, interaction }) => {
         // SEND MESSAGE
-        statusMessages(client)
+        statusMessages({ client, interaction })
                 .then(async({ countries, city_states, subjects, organisations, religions }) => {
                         await interaction.reply({
                                 content: countries + city_states + subjects + organisations + religions,
