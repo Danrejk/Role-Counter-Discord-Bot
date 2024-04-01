@@ -13,7 +13,8 @@ module.exports = {
                         if (err) return console.errror(err.message);})
 
                 // SEND MESSAGE
-                statusMessages({ client, interaction })
+                interactionGuildId = interaction.guild.id
+                statusMessages({ client, interactionGuildId })
                 .then(async({ countries, city_states, subjects, organisations, religions }) => {
                         // Interaction Reply
                         await interaction.reply({

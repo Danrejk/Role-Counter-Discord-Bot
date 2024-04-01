@@ -7,12 +7,13 @@ module.exports = {
         .setDescription("Displays the current count of members of each watched role."),
     execute: async ({ client, interaction }) => {
         // SEND MESSAGE
-        statusMessages({ client, interaction })
-                .then(async({ countries, city_states, subjects, organisations, religions }) => {
-                        await interaction.reply({
-                                content: countries + city_states + subjects + organisations + religions,
-                                ephemeral: true,
-                            });
-                    })
+        interactionGuildId = interaction.guild.id
+        statusMessages({ client, interactionGuildId })
+        .then(async({ countries, city_states, subjects, organisations, religions }) => {
+                await interaction.reply({
+                        content: countries + city_states + subjects + organisations + religions,
+                        ephemeral: true,
+                    });
+            })
     }
 }
