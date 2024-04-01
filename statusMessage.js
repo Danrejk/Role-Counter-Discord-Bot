@@ -1,4 +1,3 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
 const sqlite3 = require('sqlite3').verbose();
 
 function statusMessages({ client, interaction }) {
