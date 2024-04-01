@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { PermissionFlagsBits } = require("discord-api-types/v10");
 const sqlite3 = require('sqlite3').verbose();
+const { updateMessages } = require("../components/updateMessages");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -30,10 +31,13 @@ module.exports = {
                             }
                             else{
                                     db.run(`UPDATE watchedRoles SET leader = ? WHERE roleId = ?`, [leader, roleId], async(err) => {
-                                            if (err) {
+                                                if (err) {
                                                 return console.error(err.message);
-                                            }
-                                            await interaction.reply(`<@&${roleId}>'s leader has been updated to ${leader}`);
+                                                }
+                                                await interaction.reply(`<@&${roleId}>'s leader has been updated to ${leader}`);
+                                                
+                                                interactionGuildId = interaction.guild.id
+                                                updateMessages({ client, interactionGuildId })
                                         });
                             }
                     })

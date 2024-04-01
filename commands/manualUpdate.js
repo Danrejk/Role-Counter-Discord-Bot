@@ -5,7 +5,7 @@ const { updateMessages } = require("../components/updateMessages");
 module.exports = {
 	data: new SlashCommandBuilder()
                 .setName("manual-update")
-                .setDescription("Creates a message showing the current count of players with watched roles.")
+                .setDescription("Manualy updates Role Member Count messages")
                 .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles),
 	execute: async ({ client, interaction }) => {
                 // Interaction Reply

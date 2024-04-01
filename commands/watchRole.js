@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { PermissionFlagsBits } = require("discord-api-types/v10");
 const sqlite3 = require('sqlite3').verbose();
+const { updateMessages } = require("../components/updateMessages");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -33,6 +34,9 @@ module.exports = {
                         if(result.length == 0){
                                 db.run(`INSERT INTO watchedRoles (roleId, guildId, category, leader) VALUES (?, ?, ?, ?)`, [roleId, guildId, category, leader]);
                                 await interaction.reply(`Added <@&${roleId}> to the Role Member Counter watch list!`)
+
+                                interactionGuildId = interaction.guild.id
+                                updateMessages({ client, interactionGuildId })
                         }
                         else{
                                 db.run(`UPDATE watchedRoles SET guildId = ?, category = ?, leader = ? WHERE roleId = ?`, [guildId, category, leader, roleId], async(err) => {
