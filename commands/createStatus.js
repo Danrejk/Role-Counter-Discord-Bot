@@ -24,8 +24,14 @@ module.exports = {
 
                         // Updated Message
                         sentMessage = await interaction.channel.send(countries + city_states + subjects + organisations + religions)
-                        db.run(`INSERT INTO updatedMessages (guildId, channelId, messageId) VALUES (?, ?, ?)`, [interaction.guild.id, interaction.channel.id, sentMessage.id])
-                        console.log(interaction.channel.id, sentMessage.id)
+                        if(interaction.channel.type == 0){
+                                db.run(`INSERT INTO updatedMessages (guildId, channelId, messageId) VALUES (?, ?, ?)`, [interaction.guild.id, interaction.channel.id, sentMessage.id])
+                                console.log("Created:", interaction.guild.id, interaction.channel.id, sentMessage.id)                                
+                        }
+                        else{
+                                db.run(`INSERT INTO updatedMessages (guildId, channelId, threadId, messageId) VALUES (?, ?, ?, ?)`, [interaction.guild.id, interaction.channel.parentId, interaction.channel.id, sentMessage.id])
+                                console.log("Created:", interaction.guild.id, interaction.channel.parentId, interaction.channel.id, sentMessage.id)                                
+                        }
 
                         db.close((err) => { if(err) return console.error(err.message) })
                 })

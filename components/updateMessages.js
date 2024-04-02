@@ -18,10 +18,18 @@ function updateMessages({ client, interactionGuildId }) {
         for (const message of results) {
             try{
                 const channel = channels.get(message.channelId)
-                const fetchedMessage = await channel.messages.fetch(message.messageId);
+                let fetchedMessage
 
-                console.log(message.guildId, message.channelId, message.messageId)
-
+                if(message.threadId == null){
+                    fetchedMessage = await channel.messages.fetch(message.messageId);
+                    console.log("Updating:", message.guildId, message.channelId, message.messageId)
+                }
+                else{
+                    thread = await channel.threads.fetch(message.threadId)
+                    fetchedMessage = await thread.messages.fetch(message.messageId);
+                    console.log("Updating:", message.guildId, message.channelId, message.threadId, message.messageId)
+                }
+                
                 fetchedMessage.edit(countries + city_states + subjects + organisations + religions)
             } catch (error) {
             console.error(`Error editing message: ${error}`);

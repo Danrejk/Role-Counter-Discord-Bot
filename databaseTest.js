@@ -18,6 +18,8 @@ const db = new sqlite3.Database('./data.db', sqlite3.OPEN_READWRITE, (err) =>{
 
 // db.run(`DELETE FROM updatedMessages`)
 
+// db.run(`ALTER TABLE updatedMessages ADD COLUMN threadId`)
+
 db.close((err) => {
   if(err) return console.error(err.message)
 })
