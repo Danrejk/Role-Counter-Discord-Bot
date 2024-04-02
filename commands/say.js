@@ -10,12 +10,12 @@ module.exports = {
         )
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles),
 	execute: async ({ client, interaction }) => {
-        if (interaction.user.id === '512664079496642575'){
+        // if (interaction.user.id === '512664079496642575'){
                 let tresc = interaction.options.getString("tresc")
                 await interaction.channel.send({content: tresc});
-        }
-        else{
-                await interaction.reply({content:"Bredzisz głupoty. Nie powiem tego.", ephemeral: true});
-        }
+        // }
+        // else{
+        //         await interaction.reply({content:"Bredzisz głupoty. Nie powiem tego.", ephemeral: true});
+        // }
 	},
 }
