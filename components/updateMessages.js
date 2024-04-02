@@ -11,7 +11,7 @@ function updateMessages({ client, interactionGuildId }) {
             reject(err);
             return;
         }
-        const { countries, city_states, subjects, organisations, religions } = await statusMessages({ client, interactionGuildId });
+        let { countries, city_states, subjects, organisations, religions } = await statusMessages({ client, interactionGuildId });
 
         const guild = await client.guilds.fetch(interactionGuildId)
         const channels = await guild.channels.fetch();
@@ -19,7 +19,7 @@ function updateMessages({ client, interactionGuildId }) {
         console.log(results)
         for (const message of results) {
             try{
-                const channel = channels.get(message.channelId)
+                let channel = channels.get(message.channelId)
 
                 // Check if Status messages are in a thread
                 if(message.threadId == null){

@@ -9,12 +9,14 @@ module.exports = {
                 .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles),
 	execute: async ({ client, interaction }) => {
                 // Interaction Reply
-                await interaction.reply({
-                        content: "Updated all Role Member Counters!",
-                        ephemeral: true,
-                });
+                await interaction.deferReply({ ephemeral: true })
 
                 interactionGuildId = interaction.guild.id
                 updateMessages({ client, interactionGuildId })
+
+                await interaction.editReply({
+                        content: "Updated all Role Member Counters!",
+                        ephemeral: true,
+                });
 	},
 }
