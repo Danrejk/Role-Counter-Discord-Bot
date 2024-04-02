@@ -5,7 +5,8 @@ const db = new sqlite3.Database('./data.db', sqlite3.OPEN_READWRITE, (err) =>{
 })
 
 // // Create the table if it doesn't exist
-// db.run(`CREATE TABLE IF NOT EXISTS updatedMessages(guildId, channelId TEXT, messageId TEXT)`);
+// db.run(`DROP TABLE updatedMessages`);
+// db.run(`CREATE TABLE updatedMessages(guildId TEXT, channelId TEXT, threadId TEXT, countriesMessageId TEXT, city_statesMessageId TEXT, subjectsMessageId TEXT, organisationsMessageId TEXT, religionsMessageId TEXT)`);
 
 // // Insert data into the table
 // db.run(`INSERT INTO updatedMessages (channelId, messageId) VALUES (?, ?)`, ["test", "test2"], function(err) {

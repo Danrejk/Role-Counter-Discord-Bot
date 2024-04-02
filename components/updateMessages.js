@@ -15,22 +15,33 @@ function updateMessages({ client, interactionGuildId }) {
 
         const guild = await client.guilds.fetch(interactionGuildId)
         const channels = await guild.channels.fetch();
+        console.log(interactionGuildId)
+        console.log(results)
         for (const message of results) {
             try{
                 const channel = channels.get(message.channelId)
-                let fetchedMessage
 
+                // Check if Status messages are in a thread
                 if(message.threadId == null){
-                    fetchedMessage = await channel.messages.fetch(message.messageId);
-                    console.log("Updating:", message.guildId, message.channelId, message.messageId)
+                    console.log("Updating in:", message.guildId, message.channelId)
                 }
                 else{
-                    thread = await channel.threads.fetch(message.threadId)
-                    fetchedMessage = await thread.messages.fetch(message.messageId);
-                    console.log("Updating:", message.guildId, message.channelId, message.threadId, message.messageId)
+                    channel = await channel.threads.fetch(message.threadId)
+                    console.log("Updating:", message.guildId, message.channelId, message.threadId)
                 }
+
+                // Update all messages
+                fetchedMessage = await channel.messages.fetch(message.countriesMessageId);
+                fetchedMessage.edit(countries)
+                fetchedMessage = await channel.messages.fetch(message.city_statesMessageId);
+                fetchedMessage.edit(city_states)
+                fetchedMessage = await channel.messages.fetch(message.subjectsMessageId);
+                fetchedMessage.edit(subjects)
+                fetchedMessage = await channel.messages.fetch(message.organisationsMessageId);
+                fetchedMessage.edit(organisations)
+                fetchedMessage = await channel.messages.fetch(message.religionsMessageId);
+                fetchedMessage.edit(religions)
                 
-                fetchedMessage.edit(countries + city_states + subjects + organisations + religions)
             } catch (error) {
             console.error(`Error editing message: ${error}`);
             }

@@ -10,6 +10,7 @@ const path = require("path");
 const { updateMessages } = require("./components/updateMessages");
 
 const client = new Discord.Client({
+  allowedMentions: { parse: [] },
   intents: [
     Discord.GatewayIntentBits.Guilds,
     Discord.GatewayIntentBits.GuildMessages,

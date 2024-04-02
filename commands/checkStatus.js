@@ -5,7 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName("check-status")
         .setDescription("Displays the current count of members of each watched role.")
-        .addStringOption(option => option.setName("category").setDescription("(Optional) Roles Category").setRequired(false)
+        .addStringOption(option => option.setName("category").setDescription("(Optional) Roles Category").setRequired(true)
                 .addChoices(
                 { name: 'Country', value: 'country', description: 'Fully independent countries looking for new players'},
                 { name: 'Subject', value: 'subject', description: 'States under independent countries' },
@@ -16,6 +16,7 @@ module.exports = {
     execute: async ({ client, interaction }) => {
         // SEND MESSAGE
         interactionGuildId = interaction.guild.id
+        interaction.deferReply({ ephemeral: true })
         statusMessages({ client, interactionGuildId })
         .then(async({ countries, city_states, subjects, organisations, religions }) => {
                 switch(interaction.options.getString("category")){
@@ -29,10 +30,8 @@ module.exports = {
                         fullMessage = organisations; break;
                     case "religion":
                         fullMessage = religions; break;
-                    default: 
-                        fullMessage = countries + city_states + subjects + organisations + religions
                 }
-                await interaction.reply({
+                await interaction.editReply({
                         content: fullMessage,
                         ephemeral: true,
                     });

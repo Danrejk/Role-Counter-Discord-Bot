@@ -9,6 +9,7 @@ module.exports = {
                 .setDescription("Creates a message showing the current count of players with watched roles.")
                 .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles),
 	execute: async ({ client, interaction }) => {
+                await interaction.deferReply({ ephemeral: true })
                 const db = new sqlite3.Database('./data.db', sqlite3.OPEN_READWRITE, (err) =>{
                         if (err) return console.errror(err.message);})
 
@@ -17,21 +18,32 @@ module.exports = {
                 statusMessages({ client, interactionGuildId })
                 .then(async({ countries, city_states, subjects, organisations, religions }) => {
                         // Interaction Reply
-                        await interaction.reply({
-                                content: "A new Role Member Count status message has been added!",
-                                ephemeral: true,
+                        await interaction.editReply({
+                                content: "A new Role Member Count status message has been added!"
                         });
 
                         // Updated Message
-                        sentMessage = await interaction.channel.send(countries + city_states + subjects + organisations + religions)
-                        if(interaction.channel.type == 0){
-                                db.run(`INSERT INTO updatedMessages (guildId, channelId, messageId) VALUES (?, ?, ?)`, [interaction.guild.id, interaction.channel.id, sentMessage.id])
-                                console.log("Created:", interaction.guild.id, interaction.channel.id, sentMessage.id)                                
-                        }
-                        else{
-                                db.run(`INSERT INTO updatedMessages (guildId, channelId, threadId, messageId) VALUES (?, ?, ?, ?)`, [interaction.guild.id, interaction.channel.parentId, interaction.channel.id, sentMessage.id])
-                                console.log("Created:", interaction.guild.id, interaction.channel.parentId, interaction.channel.id, sentMessage.id)                                
-                        }
+                        let sqlRequest = `INSERT INTO updatedMessages (guildId, channelId, threadId, countriesMessageId, city_statesMessageId, subjectsMessageId, organisationsMessageId, religionsMessageId) VALUES(
+                                ${interaction.guild.id}, 
+                                ${interaction.channel.type == 0 ? interaction.channel.id : interaction.channel.parentId},
+                                ${interaction.channel.type == 0 ? null : interaction.channel.id}, `
+
+                        sentMessage = await interaction.channel.send(countries)
+                        sqlRequest += `${sentMessage.id}, `
+                        sentMessage = await interaction.channel.send({content: city_states})
+                        sqlRequest += `${sentMessage.id}, `
+                        sentMessage = await interaction.channel.send(subjects)
+                        sqlRequest += `${sentMessage.id}, `
+                        sentMessage = await interaction.channel.send(organisations)
+                        sqlRequest += `${sentMessage.id}, `
+                        sentMessage = await interaction.channel.send(religions)
+                        sqlRequest += `${sentMessage.id}`
+
+                        sqlRequest += `)`
+
+                        console.log(sqlRequest)
+                        db.run(sqlRequest)
+
 
                         db.close((err) => { if(err) return console.error(err.message) })
                 })
