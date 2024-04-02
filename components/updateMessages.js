@@ -15,8 +15,6 @@ function updateMessages({ client, interactionGuildId }) {
 
         const guild = await client.guilds.fetch(interactionGuildId)
         const channels = await guild.channels.fetch();
-        console.log(interactionGuildId)
-        console.log(results)
         for (const message of results) {
             try{
                 let channel = channels.get(message.channelId)

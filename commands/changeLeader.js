@@ -34,7 +34,10 @@ module.exports = {
                                                 if (err) {
                                                 return console.error(err.message);
                                                 }
-                                                await interaction.reply(`<@&${roleId}>'s leader has been updated to ${leader}`);
+                                                await interaction.reply({
+                                                        content: `<@&${roleId}>'s leader has been updated to ${leader}`,
+                                                        ephemeral: true
+                                                });
                                                 
                                                 interactionGuildId = interaction.guild.id
                                                 updateMessages({ client, interactionGuildId })
