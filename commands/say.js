@@ -17,5 +17,7 @@ module.exports = {
         // else{
         //         await interaction.reply({content:"Bredzisz głupoty. Nie powiem tego.", ephemeral: true});
         // }
+        sentMessage = await interaction.reply({content:"Did it", ephemeral: true});
+        sentMessage.delete()
 	},
 }
