@@ -11,8 +11,8 @@ module.exports = {
         .addStringOption(option => option.setName("leader").setDescription("(Optional) Leader of the state/organisation").setRequired(false))
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles),
 	execute: async ({ client, interaction }) => {
+                roleId = interaction.options.getRole("role").id
                 if(interaction.member.roles.cache.has(roleId)){
-                    roleId = interaction.options.getRole("role").id
                     guildId = interaction.options.getRole("role").guild.id
                     leader = interaction.options.getString("leader")
     
