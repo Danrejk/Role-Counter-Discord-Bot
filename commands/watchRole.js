@@ -34,9 +34,6 @@ module.exports = {
                         if(result.length == 0){
                                 db.run(`INSERT INTO watchedRoles (roleId, guildId, category, leader) VALUES (?, ?, ?, ?)`, [roleId, guildId, category, leader]);
                                 await interaction.reply(`Added <@&${roleId}> to the Role Member Counter watch list!`)
-
-                                interactionGuildId = interaction.guild.id
-                                updateMessages({ client, interactionGuildId })
                         }
                         else{
                                 db.run(`UPDATE watchedRoles SET guildId = ?, category = ?, leader = ? WHERE roleId = ?`, [guildId, category, leader, roleId], async(err) => {
@@ -46,6 +43,8 @@ module.exports = {
                                         await interaction.reply(`<@&${roleId}> was already on the Role Member Counter watch list and has been updated!`);
                                     });
                         }
+                        interactionGuildId = interaction.guild.id
+                        updateMessages({ client, interactionGuildId })
                 })
                 
                 db.close((err) => { if(err) return console.error(err.message) })
