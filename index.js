@@ -8,6 +8,7 @@ const fs = require("fs");
 const path = require("path");
 
 const { updateMessages } = require("./components/updateMessages");
+const { unwatchDeletedRoles } = require("./components/unwatchDeletedRoles");
 
 const client = new Discord.Client({
   allowedMentions: { parse: [] },
@@ -89,6 +90,13 @@ client.on("interactionCreate", async interaction => {
 client.on("guildMemberUpdate", (oldMember, newMember) => {
   interactionGuildId = newMember.guild.id
   updateMessages({ client, interactionGuildId })
+});
+
+// Listen for removed roles
+client.on("roleDelete", deletedRole => {
+  console.log(`The role ${deletedRole.name} has been removed from the server.`);
+  let deletedRoleId = deletedRole.id
+  unwatchDeletedRoles({ client, interactionGuildId, deletedRoleId })
 });
 
 // Login
