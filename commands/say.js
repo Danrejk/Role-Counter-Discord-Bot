@@ -6,7 +6,7 @@ module.exports = {
         .setName("say")
         .setDescription("Say stuff")
         .addStringOption(option =>
-            option.setName("message").setRequired(true)
+            option.setName("message").setDescription("message for me to say").setRequired(true)
         )
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
 	execute: async ({ client, interaction }) => {
