@@ -8,11 +8,10 @@ module.exports = {
         .setName("change-leader")
         .setDescription("Changes the leader of a role")
         .addRoleOption(option => option.setName("role").setDescription("A role of which leader will be changed.").setRequired(true))
-        .addStringOption(option => option.setName("leader").setDescription("(Optional) Leader of the state/organisation").setRequired(false))
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles),
+        .addStringOption(option => option.setName("leader").setDescription("(Optional) Leader of the state/organisation").setRequired(false)),
 	execute: async ({ client, interaction }) => {
                 roleId = interaction.options.getRole("role").id
-                if(interaction.member.roles.cache.has(roleId)){
+                if(interaction.member.roles.cache.has(roleId) || interaction.member.permissions.has(PermissionFlagsBits.ManageRoles)){
                     guildId = interaction.options.getRole("role").guild.id
                     leader = interaction.options.getString("leader")
     
