@@ -46,6 +46,7 @@ module.exports = {
                     
                     db.close((err) => { if(err) return console.error(err.message) })
                 }
+                // if user doesn't have the role nor perms
                 else{
                     await interaction.reply({
                         content: `You are not part of <@&${roleId}> and thus, can't modify its leader.`,
