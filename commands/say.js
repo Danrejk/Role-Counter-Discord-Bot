@@ -8,13 +8,20 @@ module.exports = {
         .addStringOption(option =>
             option.setName("message").setDescription("message for me to say").setRequired(true)
         )
+        .addStringOption(option =>
+            option.setName("reply").setDescription("id of a message to reply").setRequired(false)
+        )
         .addBooleanOption(option =>
             option.setName("tts").setDescription("Text to speech").setRequired(false)
         )
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
 	execute: async ({ client, interaction }) => {
                 let message = interaction.options.getString("message")
-                await interaction.channel.send({content: message, tts: interaction.options.getBoolean("tts") ?? false});
+                await interaction.channel.send({
+                    content: message,
+                    tts: interaction.options.getBoolean("tts") ?? false,
+                    reply: { messageReference: interaction.options.getString("reply") ?? null }
+                });
 
                 sentMessage = await interaction.reply({content:"Did it", ephemeral: true});
                 sentMessage.delete()
