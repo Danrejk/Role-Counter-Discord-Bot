@@ -26,6 +26,7 @@ function updateMessages({ client, interactionGuildId }) {
                 else{
                     channel = await channel.threads.fetch(message.threadId)
                     console.log("Updating:", message.guildId, message.channelId, message.threadId)
+                    await channel.setArchived(false)
                 }
 
                 // Update all messages
