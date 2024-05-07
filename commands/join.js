@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require("@discordjs/builders")
 const { PermissionFlagsBits } = require("discord-api-types/v10");
+const { joinVoiceChannel } = require('@discordjs/voice');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -12,16 +13,19 @@ module.exports = {
     
         if (voiceChannel) {
         try {
-            await voiceChannel.join();
+            const connection = joinVoiceChannel({
+                channelId: voiceChannel.id,
+                guildId: voiceChannel.guild.id,
+                adapterCreator: voiceChannel.guild.voiceAdapterCreator,
+            });
+            sentMessage = await interaction.reply({content: "Did it", ephemeral: true});
+
         } catch (error) {
             console.error(`Error joining voice channel: ${error}`);
         }
         } else {
-        // Member is not in a voice channel
-        interaction.reply({content: "You need to be in a voice channel for this command.", ephemeral: true});
+            // Member is not in a voice channel
+            interaction.reply({content: "You need to be in a voice channel for this command.", ephemeral: true});
         }
-
-        sentMessage = await interaction.reply({content: "Did it", ephemeral: true});
-        sentMessage.delete()
 	},
 }
