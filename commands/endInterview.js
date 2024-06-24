@@ -62,7 +62,7 @@ module.exports = {
                 user = [...applicant][0][1] // convert a map into an array, get the first (only) item. Get the second item which is the actual user data. The first one is just some id.
             }
             else{
-                user = await interaction.guild.members.fetch(user.id)
+                user = await interaction.guild.members.cache.get(user.id)
             }
             console.log(user.user)
 
