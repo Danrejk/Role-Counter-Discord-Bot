@@ -1,6 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
 
-function updateLeadersFull({client, interactionGuildId}) {
+function updateLeaders({client, interactionGuildId}) {
 	return new Promise((resolve, reject) => {
 		const db = new sqlite3.Database("./data.db", sqlite3.OPEN_READWRITE, (err) => {
 			if (err) {
@@ -43,7 +43,7 @@ function updateLeadersFull({client, interactionGuildId}) {
 						try {
 							const leader = guild.members.cache.get(leaderId);
 							if (leader) {
-								if (!leaderList.includes(leader.id)) {
+								if (!leader.roles.cache.has(leaderRoleId)) {
 									await leader.roles.add(leaderRoleId);
 									console.log(`Leader role added to ${leader.user.tag}`);
 								}
@@ -77,4 +77,4 @@ function updateLeadersFull({client, interactionGuildId}) {
 	});
 }
 
-module.exports = {updateLeadersFull};
+module.exports = {updateLeaders};

@@ -1,5 +1,4 @@
 const {SlashCommandBuilder} = require("@discordjs/builders");
-const {error} = require("console");
 const {PermissionFlagsBits} = require("discord-api-types/v10");
 
 module.exports = {

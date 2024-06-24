@@ -1,7 +1,10 @@
 const sqlite3 = require("sqlite3").verbose();
 const {statusMessages} = require("./statusMessage");
+const {updateLeaders} = require("./updateLeaders");
 
 function updateMessages({client, interactionGuildId}) {
+	const unixStart = Date.now();
+
 	const db = new sqlite3.Database("./data.db", sqlite3.OPEN_READWRITE, (err) => {
 		if (err) return console.errror(err.message);
 	});
@@ -48,6 +51,11 @@ function updateMessages({client, interactionGuildId}) {
 		db.close((err) => {
 			if (err) return console.error(err.message);
 		});
+
+		unixEnd = Date.now();
+		console.log(`Finished updating all watched roles messages in ${Math.floor((unixEnd - unixStart) / 1000)}s`);
+
+		updateLeaders({client, interactionGuildId});
 	});
 }
 
