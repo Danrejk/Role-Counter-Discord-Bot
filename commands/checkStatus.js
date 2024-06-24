@@ -21,7 +21,7 @@ module.exports = {
 	execute: async ({client, interaction}) => {
 		// SEND MESSAGE
 		interactionGuildId = interaction.guild.id;
-		interaction.deferReply({ephemeral: true});
+		await interaction.deferReply({ephemeral: true});
 		statusMessages({client, interactionGuildId}).then(async ({countries, city_states, subjects, organisations, religions}) => {
 			switch (interaction.options.getString("category")) {
 				case "country":

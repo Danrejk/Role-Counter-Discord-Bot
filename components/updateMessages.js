@@ -14,7 +14,7 @@ function updateMessages({client, interactionGuildId}) {
 		}
 		let {countries, city_states, subjects, organisations, religions} = await statusMessages({client, interactionGuildId});
 
-		const guild = await client.guilds.fetch(interactionGuildId);
+		const guild = await client.guilds.cache.get(interactionGuildId);
 		const channels = await guild.channels.fetch();
 		for (const message of results) {
 			try {
