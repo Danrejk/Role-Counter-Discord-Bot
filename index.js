@@ -86,10 +86,19 @@ client.on("interactionCreate", async interaction => {
   }
 });
 
-// Listen for role member changes
+// Listen for role member changes of roles starting with set symbols
 client.on("guildMemberUpdate", (oldMember, newMember) => {
-  interactionGuildId = newMember.guild.id
-  updateMessages({ client, interactionGuildId })
+  const roleSymbols = [`"`, `'`, `[`, `{`]
+  const interactionGuildId = newMember.guild.id
+  const oldRoles = oldMember.roles.cache;
+  const newRoles = newMember.roles.cache;
+
+  const addedRole = [...newRoles.filter(role => !oldRoles.has(role.id))][0]?.[1].name;
+  const removedRole = [...oldRoles.filter(role => !newRoles.has(role.id))][0]?.[1].name;
+
+  if (roleSymbols.includes(addedRole?.[0]) || roleSymbols.includes(removedRole?.[0])){
+    updateMessages({ client, interactionGuildId })
+  }
 });
 
 // Listen for removed roles
