@@ -24,7 +24,7 @@ function statusMessages({client, interactionGuildId}) {
 				let rolesData = {};
 
 				// fetch needed all data
-				const guild = await client.guilds.fetch(interactionGuildId);
+				const guild = await client.guilds.cache.get(interactionGuildId);
 				await guild.members.fetch();
 
 				const guildRoles = await guild.roles.fetch();
