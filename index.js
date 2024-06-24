@@ -95,8 +95,8 @@ client.on("guildMemberUpdate", (oldMember, newMember) => {
 // Listen for removed roles
 client.on("roleDelete", deletedRole => {
   console.log(`The role ${deletedRole.name} has been removed from the server.`);
-  // let deletedRoleId = deletedRole.id
-  // unwatchDeletedRoles({ client, interactionGuildId, deletedRoleId })
+  let deletedRoleId = deletedRole.id
+  unwatchDeletedRoles({ client, interactionGuildId, deletedRoleId })
 });
 
 // Login
