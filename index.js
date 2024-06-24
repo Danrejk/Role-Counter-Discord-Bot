@@ -78,7 +78,7 @@ client.on("interactionCreate", async (interaction) => {
 	} catch (error) {
 		console.error(error);
 		rest.put;
-		await interaction.reply({content: "Sorry little one. Something screwed up. <@512664079496642575> please fix it."});
+		await interaction.channel.send({content: "Sorry little one. Something screwed up. <@512664079496642575> please fix it."});
 	}
 });
 
