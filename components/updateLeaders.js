@@ -1,6 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
 
-function updateLeaders({client, interactionGuildId}) {
+function updateLeadersFull({client, interactionGuildId}) {
 	return new Promise((resolve, reject) => {
 		const db = new sqlite3.Database("./data.db", sqlite3.OPEN_READWRITE, (err) => {
 			if (err) {
@@ -8,6 +8,8 @@ function updateLeaders({client, interactionGuildId}) {
 				reject(err);
 				return;
 			}
+
+			const unixStart = Date.now();
 
 			db.all(
 				`SELECT leader FROM watchedRoles WHERE guildId = ? AND (category = "country" OR category = "city-state")`,
@@ -41,10 +43,12 @@ function updateLeaders({client, interactionGuildId}) {
 						try {
 							const leader = guild.members.cache.get(leaderId);
 							if (leader) {
-								await leader.roles.add(leaderRoleId);
-								console.log(`Role added to ${leader.user.tag}`);
+								if (!leaderList.includes(leader.id)) {
+									await leader.roles.add(leaderRoleId);
+									console.log(`Leader role added to ${leader.user.tag}`);
+								}
 							} else {
-								console.warn(`User with ID ${leaderId} not found in guild`);
+								console.warn(`User with ID ${leaderId} not found on the server`);
 							}
 						} catch (err) {
 							console.error("Error while giving the leader role:", err);
@@ -57,17 +61,20 @@ function updateLeaders({client, interactionGuildId}) {
 							if (!leaderList.includes(leader.id)) {
 								if (leader.roles.cache.has(leaderRoleId)) {
 									await leader.roles.remove(leaderRoleId);
-									console.log(`Role removed from ${leader.user.tag}`);
+									console.log(`Leader role removed from ${leader.user.tag}`);
 								}
 							}
 						} catch (err) {
 							console.error(`Error removing the leader role from user with ID ${leader.id}:`, err);
 						}
 					});
+
+					unixEnd = Date.now();
+					console.log(`Finished updating leader roles in ${Math.floor((unixEnd - unixStart) / 1000)}s`);
 				}
 			);
 		});
 	});
 }
 
-module.exports = {updateLeaders};
+module.exports = {updateLeadersFull};
