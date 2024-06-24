@@ -1,18 +1,21 @@
-const sqlite3 = require('sqlite3').verbose();
-const { updateMessages } = require("./updateMessages")
+const sqlite3 = require("sqlite3").verbose();
+const {updateMessages} = require("./updateMessages");
 
-function unwatchDeletedRoles({ client, interactionGuildId, deletedRoleId }) {
-    console.log(deletedRoleId)
+function unwatchDeletedRoles({client, interactionGuildId, deletedRoleId}) {
+	console.log(deletedRoleId);
 
-    const db = new sqlite3.Database('./data.db', sqlite3.OPEN_READWRITE, (err) =>{
-        if (err) return console.errror(err.message);})
-        
-        db.run(`DELETE FROM watchedRoles WHERE roleId = ?`, [deletedRoleId]);
+	const db = new sqlite3.Database("./data.db", sqlite3.OPEN_READWRITE, (err) => {
+		if (err) return console.errror(err.message);
+	});
 
-        updateMessages({ client, interactionGuildId })
-        console.log(`Removed the role ${deletedRoleId} from the Watch List in guild ${interactionGuildId}.`);
+	db.run(`DELETE FROM watchedRoles WHERE roleId = ?`, [deletedRoleId]);
 
-        db.close((err) => { if(err) return console.error(err.message) })
-    }
+	updateMessages({client, interactionGuildId});
+	console.log(`Removed the role ${deletedRoleId} from the Watch List in guild ${interactionGuildId}.`);
 
-module.exports = { unwatchDeletedRoles };
+	db.close((err) => {
+		if (err) return console.error(err.message);
+	});
+}
+
+module.exports = {unwatchDeletedRoles};
