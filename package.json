@@ -1,26 +1,27 @@
 {
-  "name": "nodejs",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ."
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@discordjs/rest": "^2.2.0",
-    "@discordjs/voice": "^0.17.0",
-    "@types/node": "^18.0.6",
-    "discord-api-types": "^0.37.77",
-    "discord.js": "^14.14.1",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "sqlite3": "^5.1.7"
-  },
-  "devDependencies": {
-    "node": "^16.20.2"
-  },
-  "description": ""
+	"name": "nodejs",
+	"version": "1.0.0",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node ."
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@discordjs/rest": "^2.2.0",
+		"@discordjs/voice": "^0.17.0",
+		"@types/node": "^18.0.6",
+		"discord-api-types": "^0.37.77",
+		"discord.js": "^14.14.1",
+		"dotenv": "^16.4.5",
+		"express": "^4.19.2",
+		"sqlite3": "^5.1.7"
+	},
+	"devDependencies": {
+		"node": "^16.20.2",
+		"prettier": "^3.3.2"
+	},
+	"description": ""
 }
