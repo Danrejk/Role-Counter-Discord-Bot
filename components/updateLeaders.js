@@ -18,13 +18,14 @@ function updateLeaders({client, interactionGuildId}) {
 						reject(err);
 						return;
 					}
-					// const leaderRoleId = "696628197122637849";
-					const leaderRoleId = "1254882374177525871";
+					const leaderRoleId = "696628197122637849";
+					// const leaderRoleId = "1254882374177525871"; //testing server
 
 					// fetch all needed data
 					const guild = await client.guilds.cache.get(interactionGuildId);
 					await guild.members.fetch();
 
+					// Give the leader role to every member from the list
 					let leaderList = [];
 
 					for (const leader of results) {
@@ -40,8 +41,8 @@ function updateLeaders({client, interactionGuildId}) {
 						try {
 							const leader = guild.members.cache.get(leaderId);
 							if (leader) {
-								// Add the role to the member
 								await leader.roles.add(leaderRoleId);
+								console.log(`Role added to ${leader.user.tag}`);
 							} else {
 								console.warn(`User with ID ${leaderId} not found in guild`);
 							}
@@ -50,16 +51,19 @@ function updateLeaders({client, interactionGuildId}) {
 						}
 					}
 
-					// GENERATE MESSAGE
-					// Countries
-					// countriesMessage += "## __Countries__\n";
-					// countryList.forEach((e) => {
-					// 	countriesMessage += `- <@&${e}> - ${rolesData[e].leader ?? "*none*"} (${rolesData[e].memberCount})\n`;
-					// });
-
-					// resolve({
-					// 	countries: countriesMessage,
-					// });
+					// Remove role from every member not on the list
+					guild.members.cache.forEach(async (leader) => {
+						try {
+							if (!leaderList.includes(leader.id)) {
+								if (leader.roles.cache.has(leaderRoleId)) {
+									await leader.roles.remove(leaderRoleId);
+									console.log(`Role removed from ${leader.user.tag}`);
+								}
+							}
+						} catch (err) {
+							console.error(`Error removing the leader role from user with ID ${leader.id}:`, err);
+						}
+					});
 				}
 			);
 		});
