@@ -75,7 +75,7 @@ module.exports = {
 			const sentInterview = await interviewsChannel.send({
 				content: `IGN: ${ign}\nUsername: ${username} (${user.user})\nID: ${userId}\n${threadLink}`,
 			});
-			const openedThread = await sentInterview.startThread({name: username});
+			const openedThread = await sentInterview.startThread({name: ign});
 			await openedThread.send(`<@&${adminRoleIdAdmin}> <@&${modRoleIdAdmin}> <@&${chieftainRoleIdAdmin}>\n${threadLink}\n`);
 
 			// reply to the interaction
