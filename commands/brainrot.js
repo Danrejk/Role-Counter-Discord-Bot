@@ -8,7 +8,7 @@ module.exports = {
 			option
 				.setName("type")
 				.setDescription("(Optional) Specialised Brainrot")
-				.setRequired(true)
+				.setRequired(false)
 				.addChoices(
 					{name: "Wisdom", value: "wisdom", description: "Tells you goated wisdom."},
 					{name: "Maxxing", value: "maxxing", description: "Bro's wordmaxxing."}
