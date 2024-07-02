@@ -38,8 +38,6 @@ module.exports = {
 					}
 				});
 
-				console.log(unwatchedRolesList);
-
 				let message = "List of propositions to add to the watch list:\n";
 				unwatchedRolesList.forEach((roleId) => {
 					message += `- <@&${roleId}>\n`;
