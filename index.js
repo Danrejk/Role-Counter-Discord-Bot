@@ -101,7 +101,7 @@ client.on("guildMemberUpdate", (oldMember, newMember) => {
 
 	const addedRole = [...newRoles.filter((role) => !oldRoles.has(role.id))][0]?.[1].name;
 	const removedRole = [...oldRoles.filter((role) => !newRoles.has(role.id))][0]?.[1].name;
-	if (desiredRoles(addedRole?.[0]) || desiredRoles(removedRole?.[0])) {
+	if (desiredRoles(addedRole) || desiredRoles(removedRole)) {
 		const interactionGuildId = newMember.guild.id;
 		updateMessages({client, interactionGuildId});
 	}
