@@ -78,8 +78,19 @@ client.on("interactionCreate", async (interaction) => {
 	} catch (error) {
 		console.error(error);
 		rest.put;
-		await interaction.channel.send({content: "Sorry little one. Something screwed up. <@512664079496642575> please fix it."});
+		await interaction.channel.send({
+			content: "Sorry little one. Something screwed up. Tag <@512664079496642575> so he can fix it.",
+		});
 	}
+});
+
+// Error Handler
+process.on("uncaughtException", (error) => {
+	console.error(error);
+});
+
+process.on("unhandledRejection", (reason, promise) => {
+	console.error("Unhandled Rejection at:", promise, "reason:", reason);
 });
 
 // Listen for role member changes of roles starting with set symbols
