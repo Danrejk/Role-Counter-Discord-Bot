@@ -101,7 +101,7 @@ client.on("guildMemberUpdate", (oldMember, newMember) => {
 
 	const addedRole = [...newRoles.filter((role) => !oldRoles.has(role.id))][0]?.[1].name;
 	const removedRole = [...oldRoles.filter((role) => !newRoles.has(role.id))][0]?.[1].name;
-	if (desiredRoles(addedRole) || desiredRoles(removedRole)) {
+	if (desiredRoles(addedRole) || desiredRoles(removedRole?.[0])) {
 		const interactionGuildId = newMember.guild.id;
 		updateMessages({client, interactionGuildId});
 	}
@@ -111,6 +111,7 @@ client.on("guildMemberUpdate", (oldMember, newMember) => {
 client.on("roleDelete", (deletedRole) => {
 	console.log(`The role ${deletedRole.name} has been removed from the server.`);
 	let deletedRoleId = deletedRole.id;
+	const interactionGuildId = newMember.guild.id;
 	unwatchDeletedRoles({client, interactionGuildId, deletedRoleId});
 });
 
