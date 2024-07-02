@@ -9,6 +9,7 @@ const path = require("path");
 
 const {updateMessages} = require("./components/updateMessages");
 const {unwatchDeletedRoles} = require("./components/unwatchDeletedRoles");
+const desiredRoles = require("./components/desiredRoles");
 
 const client = new Discord.Client({
 	allowedMentions: {parse: []},
@@ -95,15 +96,13 @@ process.on("unhandledRejection", (reason, promise) => {
 
 // Listen for role member changes of roles starting with set symbols
 client.on("guildMemberUpdate", (oldMember, newMember) => {
-	const roleSymbols = [`"`, `'`, `[`, `{`];
-	const interactionGuildId = newMember.guild.id;
 	const oldRoles = oldMember.roles.cache;
 	const newRoles = newMember.roles.cache;
 
 	const addedRole = [...newRoles.filter((role) => !oldRoles.has(role.id))][0]?.[1].name;
 	const removedRole = [...oldRoles.filter((role) => !newRoles.has(role.id))][0]?.[1].name;
-
-	if (roleSymbols.includes(addedRole?.[0]) || roleSymbols.includes(removedRole?.[0])) {
+	if (desiredRoles(addedRole?.[0]) || desiredRoles(removedRole?.[0])) {
+		const interactionGuildId = newMember.guild.id;
 		updateMessages({client, interactionGuildId});
 	}
 });
