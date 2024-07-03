@@ -2,6 +2,7 @@ const {SlashCommandBuilder} = require("@discordjs/builders");
 const {PermissionFlagsBits} = require("discord-api-types/v10");
 const sqlite3 = require("sqlite3").verbose();
 const {updateMessages} = require("../components/updateMessages");
+const {updateLeaders} = require("../components/updateLeaders");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -40,6 +41,7 @@ module.exports = {
 
 						interactionGuildId = interaction.guild.id;
 						updateMessages({client, interactionGuildId});
+						updateLeaders({client, interactionGuildId});
 					});
 				}
 			});

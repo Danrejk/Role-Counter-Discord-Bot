@@ -3,6 +3,7 @@ const app = express();
 const Discord = require("discord.js");
 const {REST} = require("@discordjs/rest");
 const {Routes} = require("discord-api-types/v9");
+const {AuditLogEvent} = require("discord.js");
 
 const fs = require("fs");
 const path = require("path");
@@ -10,6 +11,7 @@ const path = require("path");
 const {updateMessages} = require("./components/updateMessages");
 const {unwatchDeletedRoles} = require("./components/unwatchDeletedRoles");
 const desiredRoles = require("./components/desiredRoles");
+const {exec} = require("child_process");
 
 const client = new Discord.Client({
 	allowedMentions: {parse: []},
@@ -95,13 +97,20 @@ process.on("unhandledRejection", (reason, promise) => {
 });
 
 // Listen for role member changes of roles starting with set symbols
-client.on("guildMemberUpdate", (oldMember, newMember) => {
+client.on("guildMemberUpdate", async (oldMember, newMember) => {
 	const oldRoles = oldMember.roles.cache;
 	const newRoles = newMember.roles.cache;
 
 	const addedRole = [...newRoles.filter((role) => !oldRoles.has(role.id))][0]?.[1].name;
 	const removedRole = [...oldRoles.filter((role) => !newRoles.has(role.id))][0]?.[1].name;
-	if (desiredRoles(addedRole) || desiredRoles(removedRole?.[0])) {
+
+	let executorId = await newMember.guild.fetchAuditLogs({
+		limit: 1,
+		type: AuditLogEvent.MemberRoleUpdate,
+	});
+	executorId = executorId.entries.map((entry) => entry.executorId)[0];
+
+	if ((desiredRoles(addedRole) || desiredRoles(removedRole)) && executorId != "1223751197131804742") {
 		const interactionGuildId = newMember.guild.id;
 		updateMessages({client, interactionGuildId});
 	}

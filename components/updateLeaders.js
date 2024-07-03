@@ -24,7 +24,7 @@ function updateLeaders({client, interactionGuildId}) {
 					// const leaderRoleId = "1254882374177525871"; //testing server
 
 					// fetch all needed data
-					const guild = await client.guilds.cache.get(interactionGuildId);
+					const guild = client.guilds.cache.get(interactionGuildId);
 					await guild.members.fetch();
 
 					// Give the leader role to every member from the list
@@ -70,7 +70,7 @@ function updateLeaders({client, interactionGuildId}) {
 					});
 
 					unixEnd = Date.now();
-					console.log(`Finished updating leader roles in ${Math.floor((unixEnd - unixStart) / 1000)}s`);
+					console.log(`Finished updating leader roles in ${(unixEnd - unixStart) / 1000}s`);
 				}
 			);
 		});

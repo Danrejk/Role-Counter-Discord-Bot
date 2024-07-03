@@ -3,6 +3,7 @@ const {PermissionFlagsBits} = require("discord-api-types/v10");
 const sqlite3 = require("sqlite3").verbose();
 const {updateMessages} = require("../components/updateMessages");
 const {unwatchDeletedRoles} = require("../components/unwatchDeletedRoles");
+const {updateLeaders} = require("../components/updateLeaders");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -34,6 +35,8 @@ module.exports = {
 
 				if (!roleExists) {
 					unwatchDeletedRoles({client, interactionGuildId, deletedRoleId: roleId});
+					updateMessages({client, interactionGuildId});
+					updateLeaders({client, interactionGuildId});
 				}
 			}
 		});

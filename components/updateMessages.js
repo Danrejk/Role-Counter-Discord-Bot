@@ -1,6 +1,5 @@
 const sqlite3 = require("sqlite3").verbose();
 const {statusMessages} = require("./statusMessage");
-const {updateLeaders} = require("./updateLeaders");
 
 function updateMessages({client, interactionGuildId}) {
 	const unixStart = Date.now();
@@ -27,21 +26,23 @@ function updateMessages({client, interactionGuildId}) {
 				if (message.threadId == null) {
 					console.log("Updating in:", message.guildId, message.channelId);
 				} else {
-					channel = await channel.threads.fetch(message.threadId);
+					channel = channel.threads.cache.get(message.threadId);
 					console.log("Updating:", message.guildId, message.channelId, message.threadId);
-					await channel.setArchived(false);
+					// unarchive thread if it's archived
+					if (channel.archived) await channel.setArchived(false);
 				}
 
+				await channel.messages.fetch();
 				// Update all messages
-				fetchedMessage = await channel.messages.fetch(message.countriesMessageId);
+				fetchedMessage = channel.messages.cache.get(message.countriesMessageId);
 				fetchedMessage.edit(countries);
-				fetchedMessage = await channel.messages.fetch(message.city_statesMessageId);
+				fetchedMessage = channel.messages.cache.get(message.city_statesMessageId);
 				fetchedMessage.edit(city_states);
-				fetchedMessage = await channel.messages.fetch(message.subjectsMessageId);
+				fetchedMessage = channel.messages.cache.get(message.subjectsMessageId);
 				fetchedMessage.edit(subjects);
-				fetchedMessage = await channel.messages.fetch(message.organisationsMessageId);
+				fetchedMessage = channel.messages.cache.get(message.organisationsMessageId);
 				fetchedMessage.edit(organisations);
-				fetchedMessage = await channel.messages.fetch(message.religionsMessageId);
+				fetchedMessage = channel.messages.cache.get(message.religionsMessageId);
 				fetchedMessage.edit(religions);
 			} catch (error) {
 				console.error(`Error editing message: ${error}`);
@@ -53,9 +54,7 @@ function updateMessages({client, interactionGuildId}) {
 		});
 
 		unixEnd = Date.now();
-		console.log(`Finished updating all watched roles messages in ${Math.floor((unixEnd - unixStart) / 1000)}s`);
-
-		updateLeaders({client, interactionGuildId});
+		console.log(`Finished updating all watched roles messages in ${(unixEnd - unixStart) / 1000}s`);
 	});
 }
 
