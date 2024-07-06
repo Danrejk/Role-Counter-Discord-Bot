@@ -26,8 +26,8 @@ module.exports = {
 	execute: async ({client, interaction}) => {
 		const guild = await client.guilds.cache.get(interaction.guild.id);
 		await guild.members.fetch();
-		const editedRole = interaction.options.getRole("editedRole");
-		const edittingRole = interaction.options.getRole("edittingRole");
+		const editedRole = interaction.options.getRole("edited-role");
+		const edittingRole = interaction.options.getRole("editting-role");
 		const subcommand = interaction.options.getSubcommand();
 
 		let memberCount = 0;
