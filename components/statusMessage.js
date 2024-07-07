@@ -1,4 +1,5 @@
 const sqlite3 = require("sqlite3").verbose();
+const findRoleEmoji = require("./findRoleEmoji");
 
 function statusMessages({client, interactionGuildId}) {
 	return new Promise((resolve, reject) => {
@@ -80,24 +81,30 @@ function statusMessages({client, interactionGuildId}) {
 
 				// GENERATE MESSAGE
 				// Countries
+				const emojiGuild = client.guilds.cache.get("1259516467721011250");
+				await emojiGuild.emojis.fetch();
 				countriesMessage += "## __Countries__\n";
 				countryList.forEach((e) => {
-					countriesMessage += `- <@&${e}> - ${rolesData[e].leader ?? "*none*"} (${rolesData[e].memberCount})\n`;
+					const emoji = findRoleEmoji({client, roleId: e, useEmpty: true});
+					countriesMessage += `- ${emoji} <@&${e}> - ${rolesData[e].leader ?? "*none*"} (${rolesData[e].memberCount})\n`;
 				});
 				// City-States
 				city_statesMessage += "## __City-States__\n";
 				city_stateList.forEach((e) => {
-					city_statesMessage += `- <@&${e}> - ${rolesData[e].leader ?? "*none*"} (${rolesData[e].memberCount})\n`;
+					const emoji = findRoleEmoji({client, roleId: e, useEmpty: true});
+					city_statesMessage += `- ${emoji} <@&${e}> - ${rolesData[e].leader ?? "*none*"} (${rolesData[e].memberCount})\n`;
 				});
 				// Subjects
 				subjectsMessage += "## __Subjects__\n";
 				subjectList.forEach((e) => {
-					subjectsMessage += `- <@&${e}> - ${rolesData[e].leader ?? "*none*"} (${rolesData[e].memberCount})\n`;
+					const emoji = findRoleEmoji({client, roleId: e, useEmpty: true});
+					subjectsMessage += `- ${emoji} <@&${e}> - ${rolesData[e].leader ?? "*none*"} (${rolesData[e].memberCount})\n`;
 				});
 				// Organisations
 				organisationsMessage += "## __Organisations__\n";
 				organisationList.forEach((e) => {
-					organisationsMessage += `- <@&${e}> - ${rolesData[e].leader ?? "*none*"} (${rolesData[e].memberCount})\n`;
+					const emoji = findRoleEmoji({client, roleId: e, useEmpty: true});
+					organisationsMessage += `- ${emoji} <@&${e}> - ${rolesData[e].leader ?? "*none*"} (${rolesData[e].memberCount})\n`;
 				});
 				// Religions
 				religionsMessage += "## __Religions__\n";

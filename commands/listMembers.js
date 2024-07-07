@@ -1,4 +1,5 @@
 const {SlashCommandBuilder} = require("@discordjs/builders");
+const findRoleEmoji = require("../components/findRoleEmoji");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -12,6 +13,7 @@ module.exports = {
 		let memberList = [];
 
 		try {
+			await interaction.deferReply();
 			// get members with the role
 			guild.members.cache.forEach((member) => {
 				if (member.roles.cache.has(role.id)) {
@@ -19,12 +21,17 @@ module.exports = {
 				}
 			});
 
+			// get emoji
+			const roleId = role.id;
+			console.log(roleId);
+			const emoji = findRoleEmoji({client, roleId, useEmpty: false});
+
 			// construct message
-			message = `Members with the ${role} role (${memberList.length}):\n`;
+			message = `Members with the ${emoji}${role} role (${memberList.length}):\n`;
 			memberList.forEach((member) => {
 				message += `- ${member}\n`;
 			});
-			await interaction.reply(message);
+			await interaction.editReply(message);
 		} catch (error) {
 			interaction.reply({content: `Error sending message: ${error}`, ephemeral: true});
 			console.error(error);
