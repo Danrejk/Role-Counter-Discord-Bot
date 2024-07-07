@@ -23,7 +23,6 @@ module.exports = {
 
 			// get emoji
 			const roleId = role.id;
-			console.log(roleId);
 			const emoji = findRoleEmoji({client, roleId, useEmpty: false});
 
 			// construct message
