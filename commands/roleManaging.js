@@ -1,5 +1,6 @@
 const {SlashCommandBuilder} = require("@discordjs/builders");
 const {updateMessages} = require("../components/updateMessages");
+const {PermissionFlagsBits} = require("discord-api-types/v10");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -22,7 +23,9 @@ module.exports = {
 				.addRoleOption((option) =>
 					option.setName("editting-role").setDescription("Role of which members should get the new role.").setRequired(true)
 				)
-		),
+		)
+		.setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
+
 	execute: async ({client, interaction}) => {
 		const guild = await client.guilds.cache.get(interaction.guild.id);
 		await guild.members.fetch();
