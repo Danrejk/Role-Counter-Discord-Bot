@@ -30,43 +30,56 @@ module.exports = {
 		const edittingRole = interaction.options.getRole("editting-role");
 		const subcommand = interaction.options.getSubcommand();
 
-		let memberCount = 0;
-		let memberNotIncluded = 0;
+		let membersIncluded = [];
+		let membersNotIncluded = [];
 
 		try {
 			guild.members.cache.forEach(async (member) => {
 				if (member.roles.cache.has(edittingRole.id)) {
-					if (member.roles.cache.has(editedRole.id)) {
-						memberNotIncluded += 1;
-					} else {
-						memberCount += 1;
-						if (subcommand === "give") {
+					if (subcommand === "give") {
+						if (member.roles.cache.has(editedRole.id)) {
+							membersNotIncluded.push(member);
+						} else {
+							membersIncluded.push(member);
 							await member.roles.add(editedRole.id);
-						} else if (subcommand === "remove") {
+						}
+					} else if (subcommand === "remove") {
+						if (!member.roles.cache.has(editedRole.id)) {
+							membersNotIncluded.push(member);
+						} else {
+							membersIncluded.push(member);
 							await member.roles.remove(editedRole.id);
 						}
 					}
 				}
 			});
 
-			let message = `Members (${memberCount}) with the ${edittingRole} `;
+			let messageAltered = `Member(s) (${membersIncluded.length}) with the ${edittingRole} `;
+			let messageNotAltered = "";
 
 			if (subcommand === "give") {
-				message += `recieved the ${editedRole} role.`;
-				if (memberNotIncluded != 0) {
-					message += `\n ${memberNotIncluded} members already had the role.`;
+				messageAltered += `recieved the ${editedRole} role:\n`;
+				if (membersNotIncluded.length != 0) {
+					messageNotAltered += `${membersNotIncluded.length} member(s) already had the role:\n`;
 				}
 			} else if (subcommand === "remove") {
-				message += `have had their ${editedRole} role removed.`;
-				if (memberNotIncluded != 0) {
-					message += `\n ${memberNotIncluded} members didn't have the role.`;
+				messageAltered += `have had their ${editedRole} role removed:\n`;
+				if (membersNotIncluded.length != 0) {
+					messageNotAltered += `${membersNotIncluded.length} member(s) didn't have the role:\n`;
 				}
 			}
+			// Add a list of members who were effected / uneffected
+			membersIncluded.forEach((member) => {
+				messageAltered += `- ${member}\n`;
+				console.log(member);
+			});
+			membersNotIncluded.forEach((member) => (messageNotAltered += `- ${member}\n`));
+
 			// update the role counter messages
 			const interactionGuildId = interaction.guild.id;
 			updateMessages({client, interactionGuildId});
 
-			await interaction.reply(message);
+			await interaction.reply(`${messageAltered}\n${messageNotAltered}`);
 		} catch (error) {
 			interaction.reply({content: `Error managing roles: ${error}`, ephemeral: true});
 			console.error(error);
