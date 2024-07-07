@@ -71,7 +71,6 @@ module.exports = {
 			// Add a list of members who were effected / uneffected
 			membersIncluded.forEach((member) => {
 				messageAltered += `- ${member}\n`;
-				console.log(member);
 			});
 			membersNotIncluded.forEach((member) => (messageNotAltered += `- ${member}\n`));
 
