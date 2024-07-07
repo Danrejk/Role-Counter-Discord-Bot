@@ -12,12 +12,14 @@ module.exports = {
 		let memberList = [];
 
 		try {
+			// get members with the role
 			guild.members.cache.forEach((member) => {
 				if (member.roles.cache.has(role.id)) {
 					memberList.push(member);
 				}
 			});
 
+			// construct message
 			message = `Members with the ${role} role (${memberList.length}):\n`;
 			memberList.forEach((member) => {
 				message += `- ${member}\n`;

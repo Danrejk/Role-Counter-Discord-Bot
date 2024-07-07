@@ -55,12 +55,12 @@ client.on("ready", () => {
 
 // Deploy
 client.on("ready", () => {
-	const guild_ids = client.guilds.cache.map((guild) => guild.id);
+	const guilds = client.guilds.cache;
 
 	const rest = new REST({version: "9"}).setToken(token);
-	for (const guildId of guild_ids) {
-		rest.put(Routes.applicationGuildCommands(clientId, guildId), {body: commands})
-			.then(() => console.log("Successfully updated commands for guild " + guildId))
+	for (const guild of guilds) {
+		rest.put(Routes.applicationGuildCommands(clientId, guild[1].id), {body: commands})
+			.then(() => console.log("Successfully updated in " + guild[1].name))
 			.catch(console.error);
 	}
 });
