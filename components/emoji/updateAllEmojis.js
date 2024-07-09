@@ -1,9 +1,11 @@
 const sqlite3 = require("sqlite3").verbose();
+
 const color = "\x1b[35m";
 const colorReset = "\x1b[0m";
 
-function updateAllEmojis({client, interactionGuildId, compileUpdates = false}) {
+async function updateAllEmojis({client, interactionGuildId, compileUpdates = false}) {
 	const unixStart = Date.now();
+	const guildName = client.guilds.cache.get(interactionGuildId).name;
 
 	const db = new sqlite3.Database("./data.db", sqlite3.OPEN_READWRITE, (err) => {
 		if (err) return console.errror(err.message);
@@ -34,12 +36,12 @@ function updateAllEmojis({client, interactionGuildId, compileUpdates = false}) {
 						await existingEmoji.edit({image: roleIconURL});
 
 						if (compileUpdates) updatedEmojisCount += 1;
-						else console.log(`Updated emoji: ${roleId}`);
+						else console.log(`${color}[${guildName}]${colorReset} Updated emoji: ${roleId}`);
 					} else {
 						await emojiGuild.emojis.create({attachment: roleIconURL, name: roleId});
 
 						if (compileUpdates) createdEmojisCount += 1;
-						else console.log(`Created emoji: ${roleId}`);
+						else console.log(`${color}[${guildName}]${colorReset} Created emoji: ${roleId}`);
 					}
 				}
 			} catch (error) {
@@ -48,7 +50,6 @@ function updateAllEmojis({client, interactionGuildId, compileUpdates = false}) {
 		}
 		// send reply
 		const unixEnd = Date.now();
-		const guildName = client.guilds.cache.get(interactionGuildId).name;
 		let message = `${color}[${guildName}]${colorReset} Finished updating all emojis in ${(unixEnd - unixStart) / 1000}s`;
 		if (compileUpdates && (createdEmojisCount != 0 || updatedEmojisCount != 0)) {
 			message += ` in total, created ${createdEmojisCount} and updated ${updatedEmojisCount} emojis.`;

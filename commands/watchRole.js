@@ -3,6 +3,7 @@ const {PermissionFlagsBits} = require("discord-api-types/v10");
 const sqlite3 = require("sqlite3").verbose();
 const {updateMessages} = require("../components/updateMessages");
 const {updateLeaders} = require("../components/updateLeaders");
+const {addEmoji} = require("../components/emoji/addEmoji");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -54,6 +55,7 @@ module.exports = {
 				);
 			}
 			interactionGuildId = interaction.guild.id;
+			addEmoji({client, interactionGuildId, roleId});
 			updateMessages({client, interactionGuildId});
 			updateLeaders({client, interactionGuildId});
 		});

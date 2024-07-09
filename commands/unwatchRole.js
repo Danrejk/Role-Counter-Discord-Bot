@@ -3,6 +3,7 @@ const {PermissionFlagsBits} = require("discord-api-types/v10");
 const sqlite3 = require("sqlite3").verbose();
 const {updateMessages} = require("../components/updateMessages");
 const {updateLeaders} = require("../components/updateLeaders");
+const {removeRemovedRolesEmojis} = require("../components/emoji/removeRemovedRolesEmojis");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -35,6 +36,7 @@ module.exports = {
 					await interaction.reply(`<@&${roleId}> was removed from the Role Member Counter watch list!`);
 
 					interactionGuildId = interaction.guild.id;
+					removeRemovedRolesEmojis({client, interactionGuildId});
 					updateMessages({client, interactionGuildId});
 					updateLeaders({client, interactionGuildId});
 				});

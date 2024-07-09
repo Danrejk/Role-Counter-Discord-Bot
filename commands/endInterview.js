@@ -52,20 +52,27 @@ module.exports = {
 
 			// if user is not set manually
 			if (user == null) {
-				const threadMembers = await interaction.channel.members;
-				applicant = threadMembers.filter((u) => u.roles.cache.has(applicantRoleId));
-				if (applicant.size != 1) {
-					// if no definitive applicant is found
+				try {
+					const threadMembers = await interaction.channel.members.fetch();
+					applicant = threadMembers.filter((u) => u.roles.cache.has(applicantRoleId));
+					if (applicant.size != 1) {
+						// if no definitive applicant is found
+						return await interaction.reply({
+							content: "No applicant or more than one were found. Manual input is needed",
+							ephemeral: true,
+						});
+					}
+					user = [...applicant][0][1]; // convert a map into an array, get the first (only) item. Get the second item which is the actual user data. The first one is just some id.
+				} catch (error) {
+					console.error(error);
 					return await interaction.reply({
-						content: "No applicant or more than one were found. Manual input is needed",
+						content: `There was an error getting the applicant. Try putting the applicant manually.\n\nAlso notify the bot's creator about this. Error Message:\`\`\`${error}\`\`\``,
 						ephemeral: true,
 					});
 				}
-				user = [...applicant][0][1]; // convert a map into an array, get the first (only) item. Get the second item which is the actual user data. The first one is just some id.
 			} else {
 				user = await interaction.guild.members.cache.get(user.id);
 			}
-			console.log(user.user);
 
 			const ign = interaction.options.getString("ign");
 			const username = user.user.username;

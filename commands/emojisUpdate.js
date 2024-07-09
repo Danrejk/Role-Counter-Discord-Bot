@@ -11,10 +11,10 @@ module.exports = {
 		const unixStart = Date.now();
 		await interaction.deferReply({ephemeral: true});
 
-		updateAllEmojis({client, interactionGuildId: interaction.guild.id});
-
-		// send reply
-		const unixEnd = Date.now();
-		await interaction.editReply({content: `Did it in ${(unixEnd - unixStart) / 1000}s`, ephemeral: true});
+		updateAllEmojis({client, interactionGuildId: interaction.guild.id}).then(async () => {
+			// send reply TO DO: fix this it updates before it's done.
+			const unixEnd = Date.now();
+			await interaction.editReply({content: `Did it in ${(unixEnd - unixStart) / 1000}s`, ephemeral: true});
+		});
 	},
 };

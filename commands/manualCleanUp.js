@@ -4,6 +4,7 @@ const sqlite3 = require("sqlite3").verbose();
 const {updateMessages} = require("../components/updateMessages");
 const {unwatchDeletedRoles} = require("../components/unwatchDeletedRoles");
 const {updateLeaders} = require("../components/updateLeaders");
+const {removeRemovedRolesEmojis} = require("../components/emoji/removeRemovedRolesEmojis");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -34,7 +35,8 @@ module.exports = {
 				const roleExists = interaction.guild.roles.cache.has(roleId);
 
 				if (!roleExists) {
-					unwatchDeletedRoles({client, interactionGuildId, deletedRoleId: roleId});
+					unwatchDeletedRoles({client, interactionGuildId, deletedRoleId: roleId}); // to do: make it so you don't have to put in the deleted role id
+					removeRemovedRolesEmojis({client, interactionGuildId});
 					updateMessages({client, interactionGuildId});
 					updateLeaders({client, interactionGuildId});
 				}

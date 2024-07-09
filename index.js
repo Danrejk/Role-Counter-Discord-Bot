@@ -12,6 +12,7 @@ const {updateMessages} = require("./components/updateMessages");
 const {updateAllEmojis} = require("./components/emoji/updateAllEmojis");
 const {unwatchDeletedRoles} = require("./components/unwatchDeletedRoles");
 const desiredRoles = require("./components/desiredRoles");
+const {removeRemovedRolesEmojis} = require("./components/emoji/removeRemovedRolesEmojis");
 
 const color = "\x1b[35m";
 const colorReset = "\x1b[0m";
@@ -123,7 +124,7 @@ client.on("guildMemberUpdate", async (oldMember, newMember) => {
 
 // Listen for removed roles
 client.on("roleDelete", (deletedRole) => {
-	console.log(`${color}[${guild[1].name}]${colorReset} The role ${deletedRole.name} has been removed from the server.`);
+	console.log(`${color}[${deletedRole.guild.name}]${colorReset} The role ${deletedRole.name} has been removed from the server.`);
 	unwatchDeletedRoles({client, interactionGuildId: deletedRole.guild.id, deletedRoleId: deletedRole.id});
 });
 
