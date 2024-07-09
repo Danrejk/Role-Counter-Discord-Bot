@@ -33,7 +33,8 @@ async function updateAllEmojis({client, interactionGuildId, compileUpdates = fal
 				if (roleIconURL) {
 					const existingEmoji = emojiGuild.emojis.cache.find((emoji) => emoji.name === roleId);
 					if (existingEmoji) {
-						await existingEmoji.edit({image: roleIconURL});
+						await existingEmoji.delete();
+						await emojiGuild.emojis.create({attachment: roleIconURL, name: roleId});
 
 						if (compileUpdates) updatedEmojisCount += 1;
 						else console.log(`${color}[${guildName}]${colorReset} Updated emoji: ${roleId}`);

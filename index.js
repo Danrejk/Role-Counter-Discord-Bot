@@ -12,7 +12,8 @@ const {updateMessages} = require("./components/updateMessages");
 const {updateAllEmojis} = require("./components/emoji/updateAllEmojis");
 const {unwatchDeletedRoles} = require("./components/unwatchDeletedRoles");
 const desiredRoles = require("./components/desiredRoles");
-const {removeRemovedRolesEmojis} = require("./components/emoji/removeRemovedRolesEmojis");
+const {isWatchedRole} = require("./components/isWatchedRole");
+const {addEmoji} = require("./components/emoji/addEmoji");
 
 const color = "\x1b[35m";
 const colorReset = "\x1b[0m";
@@ -126,6 +127,16 @@ client.on("guildMemberUpdate", async (oldMember, newMember) => {
 client.on("roleDelete", (deletedRole) => {
 	console.log(`${color}[${deletedRole.guild.name}]${colorReset} The role ${deletedRole.name} has been removed from the server.`);
 	unwatchDeletedRoles({client, interactionGuildId: deletedRole.guild.id, deletedRoleId: deletedRole.id});
+});
+
+// Listen for updated roles
+client.on("roleUpdate", (oldRole, newRole) => {
+	if (isWatchedRole(newRole.id)) {
+		if (oldRole.iconURL() !== newRole.iconURL()) {
+			console.log(`${color}[${newRole.guild.name}]${colorReset} The icon of the ${newRole.name} role was updated.`);
+			addEmoji({client, interactionGuildId: newRole.guild.id, roleId: newRole.id});
+		}
+	}
 });
 
 // Login

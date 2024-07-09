@@ -17,13 +17,14 @@ async function addEmoji({client, interactionGuildId, roleId}) {
 			await emojiGuild.emojis.fetch();
 			const existingEmoji = emojiGuild.emojis.cache.find((emoji) => emoji.name === roleId);
 			if (existingEmoji) {
-				await existingEmoji.edit({image: roleIconURL});
+				await existingEmoji.delete();
+				await emojiGuild.emojis.create({attachment: roleIconURL, name: roleId});
 				console.log(`${color}[${guildName}]${colorReset} Updated emoji: ${roleId}`);
 			} else {
 				await emojiGuild.emojis.create({attachment: roleIconURL, name: roleId});
 				console.log(`${color}[${guildName}]${colorReset} Created emoji: ${roleId}`);
 			}
-		}
+		} else console.log(`${color}[${guildName}]${colorReset} Did not add an emoji for ${roleId}`);
 	} catch (error) {
 		console.error("Error adding a role emoji:", error);
 	}
