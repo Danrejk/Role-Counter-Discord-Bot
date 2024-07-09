@@ -1,5 +1,5 @@
 const {SlashCommandBuilder} = require("@discordjs/builders");
-const findRoleEmoji = require("../components/findRoleEmoji");
+const findRoleEmoji = require("../components/emoji/findRoleEmoji");
 
 module.exports = {
 	data: new SlashCommandBuilder()

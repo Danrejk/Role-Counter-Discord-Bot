@@ -1,5 +1,5 @@
 const sqlite3 = require("sqlite3").verbose();
-const findRoleEmoji = require("./findRoleEmoji");
+const findRoleEmoji = require("./emoji/findRoleEmoji");
 
 function statusMessages({client, interactionGuildId}) {
 	return new Promise((resolve, reject) => {

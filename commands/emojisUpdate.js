@@ -1,6 +1,6 @@
 const {SlashCommandBuilder} = require("@discordjs/builders");
 const {PermissionFlagsBits} = require("discord-api-types/v10");
-const {updateAllEmojis} = require("../components/updateAllEmojis");
+const {updateAllEmojis} = require("../components/emoji/updateAllEmojis");
 
 module.exports = {
 	data: new SlashCommandBuilder()

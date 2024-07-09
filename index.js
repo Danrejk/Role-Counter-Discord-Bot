@@ -9,7 +9,7 @@ const fs = require("fs");
 const path = require("path");
 
 const {updateMessages} = require("./components/updateMessages");
-const {updateAllEmojis} = require("./components/updateAllEmojis");
+const {updateAllEmojis} = require("./components/emoji/updateAllEmojis");
 const {unwatchDeletedRoles} = require("./components/unwatchDeletedRoles");
 const desiredRoles = require("./components/desiredRoles");
 
@@ -97,7 +97,6 @@ client.on("interactionCreate", async (interaction) => {
 process.on("uncaughtException", (error) => {
 	console.error(error);
 });
-
 process.on("unhandledRejection", (reason, promise) => {
 	console.error("Unhandled Rejection at:", promise, "reason:", reason);
 });
@@ -124,10 +123,8 @@ client.on("guildMemberUpdate", async (oldMember, newMember) => {
 
 // Listen for removed roles
 client.on("roleDelete", (deletedRole) => {
-	console.log(`The role ${deletedRole.name} has been removed from the server.`);
-	let deletedRoleId = deletedRole.id;
-	const interactionGuildId = deletedRole.guild.id;
-	unwatchDeletedRoles({client, interactionGuildId, deletedRoleId});
+	console.log(`${color}[${guild[1].name}]${colorReset} The role ${deletedRole.name} has been removed from the server.`);
+	unwatchDeletedRoles({client, interactionGuildId: deletedRole.guild.id, deletedRoleId: deletedRole.id});
 });
 
 // Login
