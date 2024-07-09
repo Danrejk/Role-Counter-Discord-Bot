@@ -27,7 +27,7 @@ async function updateAllEmojis({client, interactionGuildId, compileUpdates = fal
 			try {
 				// fetch the image url
 				const role = await guild.roles.fetch(roleId);
-				const roleIconURL = role.iconURL();
+				const roleIconURL = role?.iconURL();
 
 				// update/create emojis
 				if (roleIconURL) {
