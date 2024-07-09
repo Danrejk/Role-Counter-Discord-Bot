@@ -9,9 +9,9 @@ const fs = require("fs");
 const path = require("path");
 
 const {updateMessages} = require("./components/updateMessages");
+const {updateAllEmojis} = require("./components/updateAllEmojis");
 const {unwatchDeletedRoles} = require("./components/unwatchDeletedRoles");
 const desiredRoles = require("./components/desiredRoles");
-const {exec} = require("child_process");
 
 const client = new Discord.Client({
 	allowedMentions: {parse: []},
@@ -60,8 +60,11 @@ client.on("ready", () => {
 	const rest = new REST({version: "9"}).setToken(token);
 	for (const guild of guilds) {
 		rest.put(Routes.applicationGuildCommands(clientId, guild[1].id), {body: commands})
-			.then(() => console.log("Successfully updated in " + guild[1].name))
+			.then(() => console.log(`Successfully updated commands.`))
+			.then(() => updateAllEmojis({client, interactionGuildId: guild[1].id, compileUpdates: true}))
 			.catch(console.error);
+	}
+	for (const guild of guilds) {
 	}
 });
 
