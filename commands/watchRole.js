@@ -55,7 +55,8 @@ module.exports = {
 				);
 			}
 			interactionGuildId = interaction.guild.id;
-			addEmoji({client, interactionGuildId, roleId}).then(updateMessages({client, interactionGuildId}));
+			addEmoji({client, interactionGuildId, roleId});
+			updateMessages({client, interactionGuildId});
 			updateLeaders({client, interactionGuildId});
 		});
 
