@@ -13,6 +13,9 @@ const {updateAllEmojis} = require("./components/updateAllEmojis");
 const {unwatchDeletedRoles} = require("./components/unwatchDeletedRoles");
 const desiredRoles = require("./components/desiredRoles");
 
+const color = "\x1b[35m";
+const colorReset = "\x1b[0m";
+
 const client = new Discord.Client({
 	allowedMentions: {parse: []},
 	intents: [
@@ -60,7 +63,7 @@ client.on("ready", () => {
 	const rest = new REST({version: "9"}).setToken(token);
 	for (const guild of guilds) {
 		rest.put(Routes.applicationGuildCommands(clientId, guild[1].id), {body: commands})
-			.then(() => console.log(`Successfully updated commands.`))
+			.then(() => console.log(`${color}[${guild[1].name}]${colorReset} Successfully updated commands.`))
 			.then(() => updateAllEmojis({client, interactionGuildId: guild[1].id, compileUpdates: true}))
 			.catch(console.error);
 	}

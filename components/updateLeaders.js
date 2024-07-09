@@ -1,5 +1,8 @@
 const sqlite3 = require("sqlite3").verbose();
 
+const color = "\x1b[35m";
+const colorReset = "\x1b[0m";
+
 function updateLeaders({client, interactionGuildId}) {
 	return new Promise((resolve, reject) => {
 		const db = new sqlite3.Database("./data.db", sqlite3.OPEN_READWRITE, (err) => {
@@ -10,6 +13,7 @@ function updateLeaders({client, interactionGuildId}) {
 			}
 
 			const unixStart = Date.now();
+			const guildName = client.guilds.cache.get(interactionGuildId).name;
 
 			db.all(
 				`SELECT leader FROM watchedRoles WHERE guildId = ? AND (category = "country" OR category = "city-state")`,
@@ -45,13 +49,13 @@ function updateLeaders({client, interactionGuildId}) {
 							if (leader) {
 								if (!leader.roles.cache.has(leaderRoleId)) {
 									await leader.roles.add(leaderRoleId);
-									console.log(`Leader role added to ${leader.user.tag}`);
+									console.log(`${color}[${guildName}]${colorReset} Leader role added to ${leader.user.tag}`);
 								}
 							} else {
-								console.warn(`User with ID ${leaderId} not found on the server`);
+								console.warn(`${color}[${guildName}]${colorReset} User with ID ${leaderId} not found on the server`);
 							}
 						} catch (err) {
-							console.error("Error while giving the leader role:", err);
+							console.error(`${color}[${guildName}]${colorReset} Error while giving the leader role:`, err);
 						}
 					}
 
@@ -61,16 +65,16 @@ function updateLeaders({client, interactionGuildId}) {
 							if (!leaderList.includes(leader.id)) {
 								if (leader.roles.cache.has(leaderRoleId)) {
 									await leader.roles.remove(leaderRoleId);
-									console.log(`Leader role removed from ${leader.user.tag}`);
+									console.log(`${color}[${guildName}]${colorReset} Leader role removed from ${leader.user.tag}`);
 								}
 							}
 						} catch (err) {
-							console.error(`Error removing the leader role from user with ID ${leader.id}:`, err);
+							console.error(`${color}[${guildName}]${colorReset} Error removing the leader role from user with ID ${leader.id}:`, err);
 						}
 					});
 
 					unixEnd = Date.now();
-					console.log(`Finished updating leader roles in ${(unixEnd - unixStart) / 1000}s`);
+					console.log(`${color}[${guildName}]${colorReset} Finished updating leader roles in ${(unixEnd - unixStart) / 1000}s`);
 				}
 			);
 		});

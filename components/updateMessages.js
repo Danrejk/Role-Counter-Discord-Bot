@@ -1,8 +1,12 @@
 const sqlite3 = require("sqlite3").verbose();
 const {statusMessages} = require("./statusMessage");
 
+const color = "\x1b[35m";
+const colorReset = "\x1b[0m";
+
 function updateMessages({client, interactionGuildId}) {
 	const unixStart = Date.now();
+	const guildName = client.guilds.cache.get(interactionGuildId).name;
 
 	const db = new sqlite3.Database("./data.db", sqlite3.OPEN_READWRITE, (err) => {
 		if (err) return console.errror(err.message);
@@ -24,10 +28,10 @@ function updateMessages({client, interactionGuildId}) {
 
 				// Check if Status messages are in a thread
 				if (message.threadId == null) {
-					console.log("Updating in:", message.guildId, message.channelId);
+					console.log(`${color}[${guildName}]${colorReset}`, "Updating:", message.channelId);
 				} else {
 					channel = channel.threads.cache.get(message.threadId);
-					console.log("Updating:", message.guildId, message.channelId, message.threadId);
+					console.log(`${color}[${guildName}]${colorReset}`, "Updating:", message.channelId, message.threadId);
 					// unarchive thread if it's archived
 					if (channel.archived) await channel.setArchived(false);
 				}
@@ -54,7 +58,7 @@ function updateMessages({client, interactionGuildId}) {
 		});
 
 		unixEnd = Date.now();
-		console.log(`Finished updating all watched roles messages in ${(unixEnd - unixStart) / 1000}s`);
+		console.log(`${color}[${guildName}]${colorReset} Finished updating all watched roles messages in ${(unixEnd - unixStart) / 1000}s`);
 	});
 }
 

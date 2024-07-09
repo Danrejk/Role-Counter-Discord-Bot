@@ -59,7 +59,6 @@ function statusMessages({client, interactionGuildId}) {
 				religionList = [];
 
 				roleIdsSorted.forEach((e) => {
-					//console.log(rolesData[e])
 					switch (rolesData[e].category) {
 						case "country":
 							countryList.push(e);

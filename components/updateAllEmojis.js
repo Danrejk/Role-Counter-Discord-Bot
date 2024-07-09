@@ -1,4 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
+const color = "\x1b[35m";
+const colorReset = "\x1b[0m";
 
 function updateAllEmojis({client, interactionGuildId, compileUpdates = false}) {
 	const unixStart = Date.now();
@@ -46,7 +48,8 @@ function updateAllEmojis({client, interactionGuildId, compileUpdates = false}) {
 		}
 		// send reply
 		const unixEnd = Date.now();
-		let message = `Finished updating all emojis in ${(unixEnd - unixStart) / 1000}s`;
+		const guildName = client.guilds.cache.get(interactionGuildId).name;
+		let message = `${color}[${guildName}]${colorReset} Finished updating all emojis in ${(unixEnd - unixStart) / 1000}s`;
 		if (compileUpdates && (createdEmojisCount != 0 || updatedEmojisCount != 0)) {
 			message += ` in total, created ${createdEmojisCount} and updated ${updatedEmojisCount} emojis.`;
 		}
