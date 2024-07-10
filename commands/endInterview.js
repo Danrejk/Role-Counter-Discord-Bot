@@ -48,13 +48,21 @@ module.exports = {
 
 			// get the applicant
 			user = interaction.options.getUser("user");
-			await interaction.guild.members.fetch();
+			const guildMembers = await interaction.guild.members.fetch();
 
 			// if user is not set manually
 			if (user == null) {
 				try {
 					const threadMembers = await interaction.channel.members.fetch();
-					applicant = threadMembers.filter((u) => u.roles.cache.has(applicantRoleId));
+
+					const applicant = threadMembers.filter((u) => {
+						const guildMember = guildMembers.get(u.id);
+						if (guildMember) {
+							return guildMember.roles.cache.has(applicantRoleId);
+						}
+						return false;
+					});
+
 					if (applicant.size != 1) {
 						// if no definitive applicant is found
 						return await interaction.reply({
