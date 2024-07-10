@@ -48,29 +48,29 @@ module.exports = {
 
 			// get the applicant
 			user = interaction.options.getUser("user");
-			const guildMembers = await interaction.guild.members.fetch();
 
 			// if user is not set manually
 			if (user == null) {
 				try {
+					// this has to be fetched that way because fetching from thread gives you an User object and you need a GuildMember object to change the nickname
 					const threadMembers = await interaction.channel.members.fetch();
+					const guildMembers = await interaction.guild.members.fetch();
+					const guildMembersInThread = threadMembers
+						.map((threadMember) => {
+							return guildMembers.get(threadMember.id);
+						})
+						.filter((guildMember) => guildMember !== undefined);
 
-					const applicant = threadMembers.filter((u) => {
-						const guildMember = guildMembers.get(u.id);
-						if (guildMember) {
-							return guildMember.roles.cache.has(applicantRoleId);
-						}
-						return false;
-					});
+					const applicant = guildMembersInThread.filter((guildMember) => guildMember.roles.cache.has(applicantRoleId));
 
-					if (applicant.size != 1) {
+					if (applicant.length != 1) {
 						// if no definitive applicant is found
 						return await interaction.reply({
 							content: "No applicant or more than one were found. Manual input is needed",
 							ephemeral: true,
 						});
 					}
-					user = [...applicant][0][1]; // convert a map into an array, get the first (only) item. Get the second item which is the actual user data. The first one is just some id.
+					user = applicant[0]; // convert a map into an array, get the first (only) item. Get the second item which is the actual user data. The first one is just some id.
 				} catch (error) {
 					console.error(error);
 					return await interaction.reply({
