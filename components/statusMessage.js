@@ -79,9 +79,11 @@ function statusMessages({client, interactionGuildId}) {
 				});
 
 				// GENERATE MESSAGE
-				// Countries
 				const emojiGuild = client.guilds.cache.get("1259516467721011250");
+				emojiGuild.emojis.cache.clear();
 				await emojiGuild.emojis.fetch();
+
+				// Countries
 				countriesMessage += "## __Countries__\n";
 				countryList.forEach((e) => {
 					const emoji = findRoleEmoji({client, roleId: e, useEmpty: true});

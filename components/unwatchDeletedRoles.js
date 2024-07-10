@@ -1,5 +1,4 @@
 const sqlite3 = require("sqlite3").verbose();
-const {updateMessages} = require("./updateMessages");
 const {removeRemovedRolesEmojis} = require("./emoji/removeRemovedRolesEmojis");
 
 const color = "\x1b[35m";
@@ -24,7 +23,6 @@ function unwatchDeletedRoles({client, interactionGuildId, deletedRoleId}) {
 		}
 
 		removeRemovedRolesEmojis({client, interactionGuildId, removedRole: deletedRoleId});
-		updateMessages({client, interactionGuildId});
 		console.log(`${color}[${guildName}]${colorReset} Removed the role ${deletedRoleId} from the Watch List.`);
 	});
 

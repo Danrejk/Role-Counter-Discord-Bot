@@ -66,7 +66,9 @@ client.on("ready", () => {
 	for (const guild of guilds) {
 		rest.put(Routes.applicationGuildCommands(clientId, guild[1].id), {body: commands})
 			.then(() => console.log(`${color}[${guild[1].name}]${colorReset} Successfully updated commands.`))
-			.then(() => updateAllEmojis({client, interactionGuildId: guild[1].id, compileUpdates: true}))
+			// Automatically update after down-time
+			// .then(() => updateAllEmojis({client, interactionGuildId: guild[1].id, compileUpdates: true}))
+			.then(() => updateMessages({client, interactionGuildId: guild[1].id}))
 			.catch(console.error);
 	}
 	for (const guild of guilds) {
@@ -124,17 +126,19 @@ client.on("guildMemberUpdate", async (oldMember, newMember) => {
 });
 
 // Listen for removed roles
-client.on("roleDelete", (deletedRole) => {
+client.on("roleDelete", async (deletedRole) => {
 	console.log(`${color}[${deletedRole.guild.name}]${colorReset} The role ${deletedRole.name} has been removed from the server.`);
 	unwatchDeletedRoles({client, interactionGuildId: deletedRole.guild.id, deletedRoleId: deletedRole.id});
+	updateMessages({client, interactionGuildId});
 });
 
 // Listen for updated roles
-client.on("roleUpdate", (oldRole, newRole) => {
+client.on("roleUpdate", async (oldRole, newRole) => {
 	if (isWatchedRole(newRole.id)) {
 		if (oldRole.iconURL() !== newRole.iconURL()) {
 			console.log(`${color}[${newRole.guild.name}]${colorReset} The icon of the ${newRole.name} role was updated.`);
-			addEmoji({client, interactionGuildId: newRole.guild.id, roleId: newRole.id});
+			await addEmoji({client, interactionGuildId: newRole.guild.id, roleId: newRole.id});
+			updateMessages({client, interactionGuildId: newRole.guild.id});
 		}
 	}
 });
