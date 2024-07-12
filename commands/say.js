@@ -1,6 +1,5 @@
 const {SlashCommandBuilder} = require("@discordjs/builders");
 const {PermissionFlagsBits} = require("discord-api-types/v10");
-const {removeRemovedRolesEmojis} = require("../components/emoji/removeRemovedRolesEmojis");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -11,8 +10,6 @@ module.exports = {
 		.addBooleanOption((option) => option.setName("tts").setDescription("Text to speech").setRequired(false))
 		.setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
 	execute: async ({client, interaction}) => {
-		removeRemovedRolesEmojis({client, interactionGuildId: interaction.guild.id});
-
 		let message = interaction.options.getString("message");
 		try {
 			await interaction.channel.send({
