@@ -7,9 +7,7 @@ const db = new sqlite3.Database("./data.db", sqlite3.OPEN_READWRITE, (err) => {
 // // Create the table if it doesn't exist
 // db.run(`DROP TABLE updatedMessages`);
 // db.run(`CREATE TABLE updatedMessages(guildId TEXT, channelId TEXT, threadId TEXT, countriesMessageId TEXT, city_statesMessageId TEXT, subjectsMessageId TEXT, organisationsMessageId TEXT, religionsMessageId TEXT)`);
-db.run(
-	`CREATE TABLE linkedRoles(roleId TEXT, guildId TEXT, linkedRoles TEXT, countriesMessageId TEXT, city_statesMessageId TEXT, subjectsMessageId TEXT, organisationsMessageId TEXT, religionsMessageId TEXT)`
-);
+// db.run(`CREATE TABLE linkedRoles(roleId TEXT, guildId TEXT, masterId TEXT, roleType TEXT)`);
 
 // db.run(`DELETE FROM watchedRoles WHERE guildId NOT LIKE "696626298881310730"`)
 // db.run(`DELETE FROM updatedMessages WHERE guildId NOT LIKE "696626298881310730"`);
