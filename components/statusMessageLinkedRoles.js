@@ -71,7 +71,7 @@ function statusMessagesLinkedRoles({client, interactionGuildId}) {
 						const memberCount = guildRole ? guildRole.members.size : 0;
 						// Add role data to rolesData
 						linkedRoles[role.roleId] = {
-							"masterRole": role.masterId,
+							"masterId": role.masterId,
 							"type": role.type,
 							"memberCount": memberCount,
 						};
@@ -107,10 +107,11 @@ function statusMessagesLinkedRoles({client, interactionGuildId}) {
 			organisationsMessage += "## __Members of Organisations__\n";
 			masterMemberRolesIds.forEach((master) => {
 				const masterEmoji = findRoleEmoji({client, roleId: master, useEmpty: false});
-				console.log(linkedMemberRolesIds);
-
 				organisationsMessage += `### __${masterEmoji}<@&${master}> (${masterRoles[master].memberCount}):__\n`;
-				linkedMemberRolesIds.forEach((linked) => {
+
+				const filteredLinkedRoles = linkedMemberRolesIds.filter((role) => linkedRoles[role].masterId == master);
+
+				filteredLinkedRoles.forEach((linked) => {
 					const emoji = findRoleEmoji({client, roleId: linked, useEmpty: true});
 					organisationsMessage += `- ${emoji} <@&${linked}> (${linkedRoles[linked].memberCount})\n`;
 				});
@@ -119,11 +120,13 @@ function statusMessagesLinkedRoles({client, interactionGuildId}) {
 			subjectMastersMessage += "## __Subjects__\n";
 			masterSubjectRolesIds.forEach((master) => {
 				const masterEmoji = findRoleEmoji({client, roleId: master, useEmpty: false});
+				subjectMastersMessage += `### __${masterEmoji}<@&${master}> (${masterRoles[master].memberCount}):__\n`;
 
-				organisationsMessage += `### __${masterEmoji}<@&${master}> (${masterRoles[master].memberCount}):__\n`;
-				linkedSubjectRolesIds.forEach((linked) => {
+				const filteredLinkedRoles = linkedSubjectRolesIds.filter((role) => linkedRoles[role].masterId == master);
+
+				filteredLinkedRoles.forEach((linked) => {
 					const emoji = findRoleEmoji({client, roleId: linked, useEmpty: true});
-					organisationsMessage += `- ${emoji} <@&${linked}> (${linkedRoles[linked].memberCount})\n`;
+					subjectMastersMessage += `- ${emoji} <@&${linked}> (${linkedRoles[linked].memberCount})\n`;
 				});
 			});
 
