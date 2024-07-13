@@ -10,13 +10,10 @@ function statusMessages({client, interactionGuildId}) {
 				return;
 			}
 
-			let countriesMessage = "-------------------------------------------------------------------}\n";
-			let city_statesMessage = "-------------------------------------------------------------------}\n";
-			let subjectsMessage = "-------------------------------------------------------------------}\n";
 			let organisationsMessage = "-------------------------------------------------------------------}\n";
-			let religionsMessage = "-------------------------------------------------------------------}\n";
+			let vassalMastersMessage = "-------------------------------------------------------------------}\n";
 
-			db.all(`SELECT * FROM watchedRoles WHERE guildId = ?`, [interactionGuildId], async (err, results) => {
+			db.all(`SELECT * FROM linkedRoles WHERE guildId = ?`, [interactionGuildId], async (err, results) => {
 				if (err) {
 					console.error(err);
 					reject(err);
