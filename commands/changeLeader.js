@@ -36,7 +36,7 @@ module.exports = {
 						}
 						await interaction.reply({
 							content: `<@&${roleId}>'s leader has been updated to ${leader}`,
-							ephemeral: true,
+							ephemeral: false,
 						});
 
 						interactionGuildId = interaction.guild.id;
