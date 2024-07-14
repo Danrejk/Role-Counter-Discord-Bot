@@ -14,6 +14,7 @@ const {unwatchDeletedRoles} = require("./components/unwatchDeletedRoles");
 const desiredRoles = require("./components/desiredRoles");
 const {isWatchedRole} = require("./components/isWatchedRole");
 const {addEmoji} = require("./components/emoji/addEmoji");
+const {isLinkedRole} = require("./components/isLinkedRole");
 
 const color = "\x1b[35m";
 const colorReset = "\x1b[0m";
@@ -105,23 +106,26 @@ process.on("unhandledRejection", (reason, promise) => {
 	console.error("Unhandled Rejection at:", promise, "reason:", reason);
 });
 
-// Listen for role member changes of roles starting with set symbols
+// Listen for role member changes
 client.on("guildMemberUpdate", async (oldMember, newMember) => {
 	const oldRoles = oldMember.roles.cache;
 	const newRoles = newMember.roles.cache;
 
-	const addedRole = [...newRoles.filter((role) => !oldRoles.has(role.id))][0]?.[1].name;
-	const removedRole = [...oldRoles.filter((role) => !newRoles.has(role.id))][0]?.[1].name;
+	const addedRole = [...newRoles.filter((role) => !oldRoles.has(role.id))][0]?.[1].id;
+	const removedRole = [...oldRoles.filter((role) => !newRoles.has(role.id))][0]?.[1].id;
 
+	// get the id of user who edited the role to filter out edits done by the bot.
 	let executorId = await newMember.guild.fetchAuditLogs({
 		limit: 1,
 		type: AuditLogEvent.MemberRoleUpdate,
 	});
 	executorId = executorId.entries.map((entry) => entry.executorId)[0];
 
-	if ((desiredRoles(addedRole) || desiredRoles(removedRole)) && executorId != "1223751197131804742") {
-		const interactionGuildId = newMember.guild.id;
-		updateMessages({client, interactionGuildId});
+	if (executorId != "1223751197131804742" && ((await isWatchedRole(addedRole)) || (await isWatchedRole(removedRole)))) {
+		// update role count list messages
+		updateMessages({client, interactionGuildId: newMember.guild.id});
+	}
+	if ((await isLinkedRole(addedRole)) || (await isLinkedRole(removedRole))) {
 	}
 });
 

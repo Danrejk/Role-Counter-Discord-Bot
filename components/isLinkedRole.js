@@ -6,7 +6,7 @@ async function isWatchedRole(roleId) {
 			if (err) return console.errror(err.message);
 		});
 
-		db.all(`SELECT roleId FROM watchedRoles WHERE roleId = ?`, [roleId], (err, results) => {
+		db.all(`SELECT roleId FROM linkedRoles WHERE roleId = ?`, [roleId], (err, results) => {
 			if (err) {
 				console.error(err);
 				reject(err);
