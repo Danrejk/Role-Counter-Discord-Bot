@@ -14,7 +14,8 @@ const {unwatchDeletedRoles} = require("./components/unwatchDeletedRoles");
 const desiredRoles = require("./components/desiredRoles");
 const {isWatchedRole} = require("./components/isWatchedRole");
 const {addEmoji} = require("./components/emoji/addEmoji");
-const {isLinkedRole} = require("./components/isLinkedRole");
+const {isLinkedRole} = require("./components/linked/isLinkedRole");
+const {updateUserLinkedroles} = require("./components/linked/updateUserLinkedRoles");
 
 const color = "\x1b[35m";
 const colorReset = "\x1b[0m";
@@ -126,6 +127,8 @@ client.on("guildMemberUpdate", async (oldMember, newMember) => {
 		updateMessages({client, interactionGuildId: newMember.guild.id});
 	}
 	if ((await isLinkedRole(addedRole)) || (await isLinkedRole(removedRole))) {
+		console.log("LINKED ROLE ALERT");
+		updateUserLinkedroles({client, interactionGuildId: newMember.guild.id, userId: newMember.id});
 	}
 });
 
@@ -136,9 +139,9 @@ client.on("roleDelete", async (deletedRole) => {
 	updateMessages({client, interactionGuildId});
 });
 
-// Listen for updated roles
+// Listen for updated role icons
 client.on("roleUpdate", async (oldRole, newRole) => {
-	if (isWatchedRole(newRole.id)) {
+	if (await isWatchedRole(newRole.id)) {
 		if (oldRole.iconURL() !== newRole.iconURL()) {
 			console.log(`${color}[${newRole.guild.name}]${colorReset} The icon of the ${newRole.name} role was updated.`);
 			await addEmoji({client, interactionGuildId: newRole.guild.id, roleId: newRole.id});

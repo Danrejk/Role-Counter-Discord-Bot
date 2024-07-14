@@ -1,6 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
 
-async function isWatchedRole(roleId) {
+async function isLinkedRole(roleId) {
 	return new Promise((resolve, reject) => {
 		const db = new sqlite3.Database("./data.db", sqlite3.OPEN_READ, (err) => {
 			if (err) return console.errror(err.message);
@@ -19,4 +19,4 @@ async function isWatchedRole(roleId) {
 	});
 }
 
-module.exports = {isWatchedRole};
+module.exports = {isLinkedRole};

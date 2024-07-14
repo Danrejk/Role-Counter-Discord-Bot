@@ -1,5 +1,7 @@
 const sqlite3 = require("sqlite3").verbose();
-const findRoleEmoji = require("./emoji/findRoleEmoji");
+const findRoleEmoji = require("../emoji/findRoleEmoji");
+const {processLinkedResults} = require("./processLinkedResults");
+const {processMasterLinkedResults} = require("./processMasterLinkedResults");
 
 function statusMessagesLinkedRoles({client, interactionGuildId}) {
 	return new Promise((resolve, reject) => {
@@ -21,36 +23,17 @@ function statusMessagesLinkedRoles({client, interactionGuildId}) {
 			let masterRoles = {};
 			let masterMemberRolesIds = [];
 			let masterSubjectRolesIds = [];
-			db.all(`SELECT DISTINCT masterId, type FROM linkedRoles`, [], (err, results) => {
+			db.all(`SELECT DISTINCT masterId, type FROM linkedRoles`, [], async (err, results) => {
 				if (err) {
 					console.error(err);
 					reject(err);
 					return;
 				}
 
-				results.forEach((role) => {
-					const guildRole = guildRoles.get(role.masterId);
-					// Member Count
-					const memberCount = guildRole ? guildRole.members.size : 0;
-					// add role to the list
-					masterRoles[role.masterId] = {"memberCount": memberCount, "type": role.type};
-				});
-
-				// Sort by member count
-				let masterRolesSorted = Object.keys(masterRoles);
-				masterRolesSorted.sort((roleIdA, roleIdB) => masterRoles[roleIdB].memberCount - masterRoles[roleIdA].memberCount);
-
-				// Sort into categories
-				masterRolesSorted.forEach((e) => {
-					switch (masterRoles[e].type) {
-						case "member":
-							masterMemberRolesIds.push(e);
-							break;
-						case "subject":
-							masterSubjectRolesIds.push(e);
-							break;
-					}
-				});
+				const {roles, memberRolesIds, subjectRolesIds} = await processMasterLinkedResults({results, guildRoles});
+				masterRoles = roles;
+				masterMemberRolesIds = memberRolesIds;
+				masterSubjectRolesIds = subjectRolesIds;
 			});
 
 			// LIST OF LINKED ROLES
@@ -64,37 +47,10 @@ function statusMessagesLinkedRoles({client, interactionGuildId}) {
 					return;
 				}
 
-				for (const role of results) {
-					try {
-						const guildRole = guildRoles.get(role.roleId);
-						// Member Count
-						const memberCount = guildRole ? guildRole.members.size : 0;
-						// Add role data to rolesData
-						linkedRoles[role.roleId] = {
-							"masterId": role.masterId,
-							"type": role.type,
-							"memberCount": memberCount,
-						};
-					} catch (err) {
-						console.error(err);
-					}
-				}
-
-				// Sort by member count
-				let linkedRolesSorted = Object.keys(linkedRoles);
-				linkedRolesSorted.sort((roleIdA, roleIdB) => linkedRoles[roleIdB].memberCount - linkedRoles[roleIdA].memberCount);
-
-				// Sort into categories
-				linkedRolesSorted.forEach((e) => {
-					switch (linkedRoles[e].type) {
-						case "member":
-							linkedMemberRolesIds.push(e);
-							break;
-						case "subject":
-							linkedSubjectRolesIds.push(e);
-							break;
-					}
-				});
+				const {roles, memberRolesIds, subjectRolesIds} = await processLinkedResults({results, guildRoles});
+				linkedRoles = roles;
+				linkedMemberRolesIds = memberRolesIds;
+				linkedSubjectRolesIds = subjectRolesIds;
 			});
 
 			// GENERATE MESSAGE
