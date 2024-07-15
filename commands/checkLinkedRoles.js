@@ -18,7 +18,7 @@ module.exports = {
 		)
 		.setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
 	execute: async ({client, interaction}) => {
-		statusMessagesLinkedRoles({client, interactionGuildId: interaction.guild.id}).then(async ({organisations, subjectMasters}) => {
+		await statusMessagesLinkedRoles({client, interactionGuildId: interaction.guild.id}).then(async ({organisations, subjectMasters}) => {
 			let message = "";
 			const type = interaction.options.getString("type");
 			switch (type) {

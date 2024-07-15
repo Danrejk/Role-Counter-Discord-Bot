@@ -16,6 +16,7 @@ const {isWatchedRole} = require("./components/isWatchedRole");
 const {addEmoji} = require("./components/emoji/addEmoji");
 const {isLinkedRole} = require("./components/linked/isLinkedRole");
 const {updateUserLinkedroles} = require("./components/linked/updateUserLinkedRoles");
+const {isMasterLinkedRole} = require("./components/linked/isMasterLinkedRole");
 
 const color = "\x1b[35m";
 const colorReset = "\x1b[0m";
@@ -122,11 +123,17 @@ client.on("guildMemberUpdate", async (oldMember, newMember) => {
 	});
 	executorId = executorId.entries.map((entry) => entry.executorId)[0];
 
+	// update role count list messages
 	if (executorId != "1223751197131804742" && ((await isWatchedRole(addedRole)) || (await isWatchedRole(removedRole)))) {
-		// update role count list messages
 		updateMessages({client, interactionGuildId: newMember.guild.id});
 	}
-	if ((await isLinkedRole(addedRole)) || (await isLinkedRole(removedRole))) {
+	// listen for linked roles changes
+	if (
+		(await isLinkedRole(addedRole)) ||
+		(await isLinkedRole(removedRole)) ||
+		(await isMasterLinkedRole(addedRole)) ||
+		(await isMasterLinkedRole(removedRole))
+	) {
 		console.log("LINKED ROLE ALERT");
 		updateUserLinkedroles({client, interactionGuildId: newMember.guild.id, userId: newMember.id});
 	}

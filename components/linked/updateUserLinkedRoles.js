@@ -1,21 +1,30 @@
-const sqlite3 = require("sqlite3").verbose();
+const {getLinkedRoles} = require("./getLinkedRoles");
 
 async function updateUserLinkedroles({client, interactionGuildId, userId}) {
-	const db = new sqlite3.Database("./data.db", sqlite3.OPEN_READ, (err) => {
-		if (err) return console.errror(err.message);
-	});
+	const guild = client.guilds.cache.get(interactionGuildId);
+	await guild.members.fetch();
+	const guildRoles = await guild.roles.fetch();
 
-	db.all(`SELECT roleId, masterId, type FROM linkedRoles WHERE guildId = ?`, [guildId], (err, results) => {
-		if (err) {
-			console.error(err);
-			reject(err);
-			return;
+	const user = guild.members.cache.get(userId);
+	const userRoles = await user.roles.cache;
+
+	let givenMasterRoles = [];
+
+	const {roles, memberRolesIds, subjectRolesIds} = await getLinkedRoles({client, interactionGuildId});
+
+	for (const role of memberRolesIds) {
+		// check if user has one of the linked roles
+		if (userRoles.has(role) && !givenMasterRoles.includes(roles[role].masterId)) {
+			await user.roles.add(roles[role].masterId);
+			givenMasterRoles.push(roles[role].masterId);
 		}
-
-		const guild = client.guilds.cache.get(guildId);
-		const user = guild.members.cache.get(userId);
-		user.roles.fetch();
-	});
+	}
+	for (const role of subjectRolesIds) {
+		// check if user has one of the linked roles
+		if (userRoles.has(role)) {
+			await user.roles.add(roles[role].masterId);
+		}
+	}
 }
 
 module.exports = {updateUserLinkedroles};
