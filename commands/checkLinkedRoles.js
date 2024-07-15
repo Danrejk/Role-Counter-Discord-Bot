@@ -1,5 +1,4 @@
 const {SlashCommandBuilder} = require("@discordjs/builders");
-const {PermissionFlagsBits} = require("discord-api-types/v10");
 const {statusMessagesLinkedRoles} = require("../components/linked/statusMessageLinkedRoles");
 
 module.exports = {
@@ -15,8 +14,7 @@ module.exports = {
 					{name: "Member", value: "member", description: "Members of organisations."},
 					{name: "Subject", value: "subject", description: "States under independent countries."}
 				)
-		)
-		.setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
+		),
 	execute: async ({client, interaction}) => {
 		await statusMessagesLinkedRoles({client, interactionGuildId: interaction.guild.id}).then(async ({organisations, subjectMasters}) => {
 			let message = "";

@@ -1,14 +1,11 @@
 const {SlashCommandBuilder} = require("@discordjs/builders");
 const {PermissionFlagsBits} = require("discord-api-types/v10");
 const sqlite3 = require("sqlite3").verbose();
-const {updateMessages} = require("../components/updateMessages");
-const {updateLeaders} = require("../components/updateLeaders");
-const {addEmoji} = require("../components/emoji/addEmoji");
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("link-role")
-		.setDescription("Adds a role to the counter watch list")
+		.setDescription("Adds a role to the counter linked roles list")
 		.addRoleOption((option) => option.setName("role").setDescription("A role to be added to the linked roles list.").setRequired(true))
 		.addRoleOption((option) =>
 			option.setName("master-role").setDescription("A role that will be given upon recieving the linked role.").setRequired(true)
