@@ -134,7 +134,7 @@ client.on("guildMemberUpdate", async (oldMember, newMember) => {
 		(await isMasterLinkedRole(addedRole)) ||
 		(await isMasterLinkedRole(removedRole))
 	) {
-		updateUserLinkedroles({client, interactionGuildId: newMember.guild.id, user: newMember});
+		await updateUserLinkedroles({client, interactionGuildId: newMember.guild.id, user: newMember});
 	}
 });
 

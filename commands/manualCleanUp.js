@@ -5,6 +5,7 @@ const {updateMessages} = require("../components/updateMessages");
 const {unwatchDeletedRoles} = require("../components/unwatchDeletedRoles");
 const {updateLeaders} = require("../components/updateLeaders");
 const {removeRemovedRolesEmojis} = require("../components/emoji/removeRemovedRolesEmojis");
+const {updateUserLinkedroles} = require("../components/linked/updateUserLinkedRoles");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -36,16 +37,33 @@ module.exports = {
 
 				if (!roleExists) {
 					unwatchDeletedRoles({client, interactionGuildId, deletedRoleId: roleId}); // to do: make it so you don't have to put in the deleted role id
-					removeRemovedRolesEmojis({client, interactionGuildId});
-					updateMessages({client, interactionGuildId});
-					updateLeaders({client, interactionGuildId});
 				}
 			}
 		});
 
+		const guild = client.guilds.cache.get(interactionGuildId);
+		guild.members
+			.fetch()
+			.then(async (members) => {
+				for (const member of members.values()) {
+					try {
+						await updateUserLinkedroles({client, interactionGuildId, user: member});
+					} catch (error) {
+						console.error(`Error updating linked roles for ${member.user.tag}:`, error);
+					}
+				}
+			})
+			.catch((error) => {
+				console.error("Error fetching members:", error);
+			});
+
+		removeRemovedRolesEmojis({client, interactionGuildId});
+		updateMessages({client, interactionGuildId});
+		updateLeaders({client, interactionGuildId});
+
 		// true Interaction Reply
 		await interaction.editReply({
-			content: "Removed all removed roles from the Role Member Counters!",
+			content: "Cleaned everything up!",
 			ephemeral: true,
 		});
 
