@@ -16,9 +16,9 @@ function getLinkedRoles({client, interactionGuildId}) {
 				reject(err);
 				return;
 			}
-			let roles = {};
-			let memberRolesIds = [];
-			let subjectRolesIds = [];
+			let roleLinks = [];
+			let memberRolesIndexes = [];
+			let subjectRolesIndexes = [];
 
 			for (const role of results) {
 				try {
@@ -26,34 +26,35 @@ function getLinkedRoles({client, interactionGuildId}) {
 					// Member Count
 					const memberCount = guildRole ? guildRole.members.size : 0;
 					// Add role data to rolesData
-					roles[role.roleId] = {
+					roleLinks.push({
+						"roleId": role.roleId,
 						"masterId": role.masterId,
 						"type": role.type,
 						"memberCount": memberCount,
-					};
+					});
 				} catch (err) {
 					console.error(err);
 				}
 			}
 
-			// Sort by member count
-			let rolesSorted = Object.keys(roles);
-			rolesSorted.sort((roleIdA, roleIdB) => roles[roleIdB].memberCount - roles[roleIdA].memberCount);
-
 			// Sort into categories
-			rolesSorted.forEach((e) => {
-				switch (roles[e].type) {
+			for (const e in roleLinks) {
+				switch (roleLinks[e].type) {
 					case "member":
-						memberRolesIds.push(e);
+						memberRolesIndexes.push(e);
 						break;
 					case "subject":
-						subjectRolesIds.push(e);
+						subjectRolesIndexes.push(e);
 						break;
 				}
-			});
+			}
+
+			// Sort by member count
+			memberRolesIndexes.sort((indexA, indexB) => roleLinks[indexB].memberCount - roleLinks[indexA].memberCount);
+			subjectRolesIndexes.sort((indexA, indexB) => roleLinks[indexB].memberCount - roleLinks[indexA].memberCount);
 
 			// Return values
-			resolve({roles, memberRolesIds, subjectRolesIds});
+			resolve({roles: roleLinks, memberRolesIds: memberRolesIndexes, subjectRolesIds: subjectRolesIndexes});
 		});
 	});
 }

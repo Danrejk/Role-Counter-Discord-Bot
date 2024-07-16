@@ -12,7 +12,7 @@ async function updateUserLinkedroles({client, interactionGuildId, userId}) {
 	// ORGANISATIONS
 	for (const role of memberRolesIds) {
 		// check if user has one of the linked roles
-		if (userRoles.has(role) && masterMemberRolesIds.includes(roles[role].masterId)) {
+		if (userRoles.has(roles[role].roleId) && masterMemberRolesIds.includes(roles[role].masterId)) {
 			await user.roles.add(roles[role].masterId);
 
 			const indexToRemove = masterMemberRolesIds.indexOf(roles[role].masterId);
@@ -27,7 +27,7 @@ async function updateUserLinkedroles({client, interactionGuildId, userId}) {
 	// SUBJECTS
 	for (const role of subjectRolesIds) {
 		// check if user has one of the linked roles
-		if (userRoles.has(role)) {
+		if (userRoles.has(roles[role].roleId)) {
 			await user.roles.add(roles[role].masterId);
 		}
 	}
