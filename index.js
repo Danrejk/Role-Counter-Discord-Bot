@@ -134,8 +134,7 @@ client.on("guildMemberUpdate", async (oldMember, newMember) => {
 		(await isMasterLinkedRole(addedRole)) ||
 		(await isMasterLinkedRole(removedRole))
 	) {
-		console.log("LINKED ROLE ALERT");
-		updateUserLinkedroles({client, interactionGuildId: newMember.guild.id, userId: newMember.id});
+		updateUserLinkedroles({client, interactionGuildId: newMember.guild.id, user: newMember});
 	}
 });
 
