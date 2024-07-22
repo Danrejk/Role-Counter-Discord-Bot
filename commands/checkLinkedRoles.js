@@ -18,17 +18,32 @@ module.exports = {
 	execute: async ({client, interaction}) => {
 		await statusMessagesLinkedRoles({client, interactionGuildId: interaction.guild.id}).then(async ({organisations, subjectMasters}) => {
 			let message = "";
+			let messageOverflow = "";
+
 			const type = interaction.options.getString("type");
 			switch (type) {
 				case "member":
-					message += organisations;
+					if (Array.isArray(organisations)) {
+						message = organisations[0];
+						messageOverflow = organisations[1];
+					} else {
+						message = organisations;
+					}
 					break;
 				case "subject":
-					message += subjectMasters;
-					break;
+					if (Array.isArray(subjectMasters)) {
+						message = subjectMasters[0];
+						messageOverflow = subjectMasters[1];
+					} else {
+						message = subjectMasters;
+						break;
+					}
 			}
 
 			await interaction.reply(message);
+			if (messageOverflow != "") {
+				interaction.channel.send(messageOverflow);
+			}
 		});
 	},
 };

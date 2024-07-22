@@ -30,6 +30,7 @@ function statusMessagesLinkedRoles({client, interactionGuildId}) {
 
 		// Organisations and their members
 		organisationsMessage += "## __Members of Organisations__\n";
+		let organisationsMessageOverflow = "";
 		masterMemberRolesIds.forEach((master) => {
 			const masterEmoji = findRoleEmoji({client, roleId: master, useEmpty: false});
 			organisationsMessage += `### __${masterEmoji}<@&${masterRoles[master].masterId}> (${masterRoles[master].memberCount}):__\n`;
@@ -38,11 +39,17 @@ function statusMessagesLinkedRoles({client, interactionGuildId}) {
 
 			filteredLinkedRoles.forEach((linked) => {
 				const emoji = findRoleEmoji({client, roleId: linkedRoles[linked].roleId, useEmpty: true});
-				organisationsMessage += `- ${emoji} <@&${linkedRoles[linked].roleId}> (${linkedRoles[linked].memberCount})\n`;
+				roleLine = `- ${emoji} <@&${linkedRoles[linked].roleId}> (${linkedRoles[linked].memberCount})\n`;
+				if (organisationsMessage.length + roleLine.length >= 2000 || organisationsMessageOverflow != "") {
+					organisationsMessageOverflow += roleLine;
+				} else {
+					organisationsMessage += roleLine;
+				}
 			});
 		});
 		// Subjects and their masters
 		subjectMastersMessage += "## __Subjects__\n";
+		let subjectMastersMessageOverflow = "";
 		masterSubjectRolesIds.forEach((master) => {
 			const masterEmoji = findRoleEmoji({client, roleId: master, useEmpty: false});
 			subjectMastersMessage += `### __${masterEmoji}<@&${masterRoles[master].masterId}> (${masterRoles[master].memberCount}):__\n`;
@@ -51,9 +58,23 @@ function statusMessagesLinkedRoles({client, interactionGuildId}) {
 
 			filteredLinkedRoles.forEach((linked) => {
 				const emoji = findRoleEmoji({client, roleId: linkedRoles[linked].roleId, useEmpty: true});
-				subjectMastersMessage += `- ${emoji} <@&${linkedRoles[linked].roleId}> (${linkedRoles[linked].memberCount})\n`;
+				roleLine = `- ${emoji} <@&${linkedRoles[linked].roleId}> (${linkedRoles[linked].memberCount})\n`;
+
+				if (subjectMastersMessage.length + roleLine.length >= 2000 || subjectMastersMessageOverflow != "") {
+					subjectMastersMessageOverflow += roleLine;
+				} else {
+					subjectMastersMessage += roleLine;
+				}
 			});
 		});
+
+		// combine messages if there's overflow
+		if (subjectMastersMessageOverflow != "") {
+			subjectMastersMessage = [subjectMastersMessage, subjectMastersMessageOverflow];
+		}
+		if (organisationsMessageOverflow != "") {
+			organisationsMessage = [organisationsMessage, organisationsMessageOverflow];
+		}
 
 		resolve({
 			organisations: organisationsMessage,
