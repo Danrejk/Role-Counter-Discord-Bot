@@ -87,7 +87,8 @@ function statusMessages({client, interactionGuildId}) {
 				countriesMessage += "## __Countries__\n";
 				countryList.forEach((e) => {
 					const emoji = findRoleEmoji({client, roleId: e, useEmpty: true});
-					countriesMessage += `- ${emoji} <@&${e}> - ${rolesData[e].leader ?? "*none*"} (${rolesData[e].memberCount})\n`;
+					// countriesMessage += `- ${emoji} <@&${e}> - ${rolesData[e].leader ?? "*none*"} (${rolesData[e].memberCount})\n`;
+					countriesMessage += `- <@&${e}> - ${rolesData[e].leader ?? "*none*"} (${rolesData[e].memberCount})\n`;
 				});
 				// City-States
 				city_statesMessage += "## __City-States__\n";
