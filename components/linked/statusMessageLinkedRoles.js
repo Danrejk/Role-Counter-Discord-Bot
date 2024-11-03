@@ -38,8 +38,9 @@ function statusMessagesLinkedRoles({client, interactionGuildId}) {
 			const filteredLinkedRoles = linkedMemberRolesIds.filter((role) => linkedRoles[role].masterId == masterRoles[master].masterId);
 
 			filteredLinkedRoles.forEach((linked) => {
-				const emoji = findRoleEmoji({client, roleId: linkedRoles[linked].roleId, useEmpty: true});
-				roleLine = `- ${emoji} <@&${linkedRoles[linked].roleId}> (${linkedRoles[linked].memberCount})\n`;
+				// const emoji = findRoleEmoji({client, roleId: linkedRoles[linked].roleId, useEmpty: true});
+				// roleLine = `- ${emoji} <@&${linkedRoles[linked].roleId}> (${linkedRoles[linked].memberCount})\n`;
+				roleLine = `- <@&${linkedRoles[linked].roleId}> (${linkedRoles[linked].memberCount})\n`;
 				if (organisationsMessage.length + roleLine.length >= 2000 || organisationsMessageOverflow != "") {
 					organisationsMessageOverflow += roleLine;
 				} else {
@@ -51,14 +52,16 @@ function statusMessagesLinkedRoles({client, interactionGuildId}) {
 		subjectMastersMessage += "## __Subjects__\n";
 		let subjectMastersMessageOverflow = "";
 		masterSubjectRolesIds.forEach((master) => {
-			const masterEmoji = findRoleEmoji({client, roleId: master, useEmpty: false});
-			subjectMastersMessage += `### __${masterEmoji}<@&${masterRoles[master].masterId}> (${masterRoles[master].memberCount}):__\n`;
+			// const masterEmoji = findRoleEmoji({client, roleId: master, useEmpty: false});
+			// subjectMastersMessage += `### __${masterEmoji}<@&${masterRoles[master].masterId}> (${masterRoles[master].memberCount}):__\n`;
+			subjectMastersMessage += `### __<@&${masterRoles[master].masterId}> (${masterRoles[master].memberCount}):__\n`;
 
 			const filteredLinkedRoles = linkedSubjectRolesIds.filter((role) => linkedRoles[role].masterId == masterRoles[master].masterId);
 
 			filteredLinkedRoles.forEach((linked) => {
-				const emoji = findRoleEmoji({client, roleId: linkedRoles[linked].roleId, useEmpty: true});
-				roleLine = `- ${emoji} <@&${linkedRoles[linked].roleId}> (${linkedRoles[linked].memberCount})\n`;
+				// const emoji = findRoleEmoji({client, roleId: linkedRoles[linked].roleId, useEmpty: true});
+				// roleLine = `- ${emoji} <@&${linkedRoles[linked].roleId}> (${linkedRoles[linked].memberCount})\n`;
+				roleLine = `- <@&${linkedRoles[linked].roleId}> (${linkedRoles[linked].memberCount})\n`;
 
 				if (subjectMastersMessage.length + roleLine.length >= 2000 || subjectMastersMessageOverflow != "") {
 					subjectMastersMessageOverflow += roleLine;
@@ -82,5 +85,4 @@ function statusMessagesLinkedRoles({client, interactionGuildId}) {
 		});
 	});
 }
-
 module.exports = {statusMessagesLinkedRoles};
